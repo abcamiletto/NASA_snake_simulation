@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    
+        <!-- Spawn Part -->
+        <arg name="x" default="0.0"/>
+        <arg name="y" default="0.0"/>
+        <arg name="z" default="1.0"/>
+        <arg name="robot_name" default="snake_yaw"/>
+        <arg name="xacro_robot_file" default=""/>
+        
+
+        <param name="robot_description" command="$(find xacro)/xacro '$(arg xacro_robot_file)'"/>
+        
+        <node name="urdf_spawner_snake" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -x $(arg x) -y $(arg y) -z $(arg z)  -model $(arg robot_name) -param /robot_description"/>
+        
+    </launch>

@@ -1,0 +1,5 @@
+<launch>
+	<include file="$(find snake_description)/launch/spawn_full_snake.launch"/>
+ 	<!-- <include file="$(find snake_description)/launch/snake_full_control.launch"/> --> -->
+ <!-- 	<include file="$(find snake_description)/launch/snake_6dof_control.launch"/-->
+</launch>

@@ -1,0 +1,4 @@
+<launch>
+	<include file="$(find snake_description)/launch/only_yaw_snake.launch"/>
+	<include file="$(find snake_description)/launch/snake_yaw_control.launch"/>
+</launch>

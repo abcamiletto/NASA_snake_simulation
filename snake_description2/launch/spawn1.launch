@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+<include file="$(find snake_description2)/launch/spawn_xacro.launch">
+        <arg name="x" value="0.0"/>
+        <arg name="y" value="0.0"/>
+        <arg name="z" value="0.05"/>
+	<arg name="P" value="1.57079632679"/>
+	<arg name="Y" value="0"/>
+	<arg name="R" value="0"/>
+        <arg name="xacro_robot_file" value="$(find snake_description2)/robot/snake_controllers.urdf.xacro"/>
+        <arg name="robot_name" value="snake"/>
+    </include>
+
+</launch>

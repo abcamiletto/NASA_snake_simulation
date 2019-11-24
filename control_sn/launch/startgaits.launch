@@ -1,0 +1,3 @@
+<launch>
+	<node name="mycontrol" pkg="control_sn" type="gaits.py" output="screen"/>
+</launch>

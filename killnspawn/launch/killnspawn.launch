@@ -1,0 +1,3 @@
+<launch>
+	<node name="kns" pkg="killnspawn" type="general.sh" output="screen" />
+</launch>
