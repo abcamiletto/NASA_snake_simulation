@@ -5,7 +5,7 @@
 #2- inizializzo i publisher
 #4- definisco i parametri
 #5- respawn
-
+#
 #1--------------------------------------------------------------------- importo pacchetti
 from operator import truediv
 import rospy, yaml, sys
