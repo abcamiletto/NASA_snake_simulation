@@ -21,7 +21,7 @@ from control_sn.msg import param
 rospy.init_node('mycontrol')
 
 
-ros.sleep(2.)
+rospy.sleep(2.)
 #2--------------------------------------------------------------------- inizializzo i publisher
 
 motor1p = rospy.Publisher('/snake/snake_body_1_joint_position_controller/command',Float64, queue_size = 121)
