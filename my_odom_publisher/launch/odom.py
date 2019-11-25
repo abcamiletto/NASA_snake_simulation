@@ -32,7 +32,7 @@ while not rospy.is_shutdown():
     r.sleep()
 
 
-#    txt_file=open("/home/andrea/Desktop/simsnake/demofile3.txt", "a+")
+#    txt_file=open("~/Desktop/simsnake/demofile3.txt", "a+")
 #    txt_file.write("x:" + str(pos.x) + "\n") 
 #    txt_file.write("y:" + str(pos.y) + "\n")
 #    txt_file.write("\n")

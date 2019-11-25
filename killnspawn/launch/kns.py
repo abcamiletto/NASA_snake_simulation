@@ -30,7 +30,7 @@ except:
 #uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
 #roslaunch.configure_logging(uuid)
 #launch = roslaunch.parent.ROSLaunchParent(uuid, 
-#["/home/andrea/Desktop/simsnake/src/snake_description2/launch/no_gaz_start.launch"])
+#["~/Desktop/simsnake/src/snake_description2/launch/no_gaz_start.launch"])
 #launch.start()
 
 #rospy.sleep(3.)
@@ -40,7 +40,7 @@ except:
 #uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
 #roslaunch.configure_logging(uuid)
 #launch = roslaunch.parent.ROSLaunchParent(uuid, 
-#["/home/andrea/Desktop/simsnake/src/control_sn/launch/snake_full_control.launch"])
+#["~/Desktop/simsnake/src/control_sn/launch/snake_full_control.launch"])
 #launch.start()
 
 
