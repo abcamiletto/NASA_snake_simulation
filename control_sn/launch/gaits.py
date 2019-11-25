@@ -19,10 +19,9 @@ import subprocess
 from control_sn.msg import param
 
 rospy.init_node('mycontrol')
-rospy.sleep(5.)
 
 
-
+ros.sleep(2.)
 #2--------------------------------------------------------------------- inizializzo i publisher
 
 motor1p = rospy.Publisher('/snake/snake_body_1_joint_position_controller/command',Float64, queue_size = 121)
@@ -126,16 +125,7 @@ while not rospy.is_shutdown():
 
 
 
-P = param()
 
-P.A_p = a_p
-P.Ot_p = ot_p
-P.Ox_p = ox_p
-P.A_y = a_y
-P.Ot_y = ot_y
-P.Ox_y = ox_y
-
-pub_param.publish(P)
 
 
 
