@@ -59,6 +59,8 @@ ot_y = 1.8
 ox_y = 0
 
 v_med = 0.0
+ph = 0
+k = 0
 
 #5--------------------------------------------------------------------- pubblico i parametri
 
@@ -70,6 +72,9 @@ P.Ox_p = ox_p
 P.A_y = a_y
 P.Ot_y = ot_y
 P.Ox_y = ox_y
+P.V_m = v_med
+P.Ph = ph
+P.K = k
 
 rospy.sleep(0.1)
 pub_param.publish(P)
@@ -96,13 +101,13 @@ while not rospy.is_shutdown():
     msg7p = a_p*math.sin(t * ot_p + ox_p*6)
     
     #ora allo yaw 
-    msg1y = a_y*math.sin(t * ot_y + ox_y*0) + v_med 
-    msg2y = a_y*math.sin(t * ot_y + ox_y*1) + v_med 
-    msg3y = a_y*math.sin(t * ot_y + ox_y*2) + v_med
-    msg4y = a_y*math.sin(t * ot_y + ox_y*3) + v_med
-    msg5y = a_y*math.sin(t * ot_y + ox_y*4) + v_med
-    msg6y = a_y*math.sin(t * ot_y + ox_y*5) + v_med
-    msg7y = a_y*math.sin(t * ot_y + ox_y*6) + v_med
+    msg1y = a_y * math.sin(t * ot_y + ox_y * 0 + ph) + v_med + 0 * k
+    msg2y = a_y * math.sin(t * ot_y + ox_y * 1 + ph) + v_med + 1 * k
+    msg3y = a_y * math.sin(t * ot_y + ox_y * 2 + ph) + v_med + 2 * k
+    msg4y = a_y * math.sin(t * ot_y + ox_y * 3 + ph) + v_med + 3 * k
+    msg5y = a_y * math.sin(t * ot_y + ox_y * 4 + ph) + v_med + 4 * k
+    msg6y = a_y * math.sin(t * ot_y + ox_y * 5 + ph) + v_med + 5 * k
+    msg7y = a_y * math.sin(t * ot_y + ox_y * 6 + ph) + v_med + 6 * k
     
     #pubblico
 
