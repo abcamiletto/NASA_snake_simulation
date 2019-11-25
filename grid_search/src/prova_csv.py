@@ -9,6 +9,12 @@ from control_sn.msg import param
 x = 0
 y = 0
 i = 0
+a_p = 0
+ot_p = 0
+ox_p = 0
+a_y = 0
+ot_y = 0
+ox_y = 0
 
 def Callback1(data):
     global x, y
@@ -30,17 +36,17 @@ while not rospy.is_shutdown():
     pos = rospy.Subscriber ('/my_odom', Pose2D, Callback1)
     param = rospy.Subscriber ('/param', param, Callback2)
     i+=1
-    csvRow = ['Tentativo' i]
+    csvRow = ['Tentativo' + str(i)]
     csvfile = "data.csv"
     with open(csvfile, "a") as fp:
         wr = csv.writer(fp, dialect='excel')
         wr.writerow(csvRow)
-        wr.writerow('Amplitude Pitch', a_p)
-        wr.writerow('Spatial frequency Pitch', ox_p)
-        wr.writerow('Temporal frequency Pitch', ot_p)
-        wr.writerow('Amplitude Yaw', a_y)
-        wr.writerow('Spatial frequency Yaw', ox_y)
-        wr.writerow('Temporal frequency Yaw', ot_y)
-        wr.writerow('x', x)
-        wr.writerow('y', y)
+        wr.writerow(['Amplitude Pitch', a_p])
+        wr.writerow(['Spatial frequency Pitch', ox_p])
+        wr.writerow(['Temporal frequency Pitch', ot_p])
+        wr.writerow(['Amplitude Yaw', a_y])
+        wr.writerow(['Spatial frequency Yaw', ox_y])
+        wr.writerow(['Temporal frequency Yaw', ot_y])
+        wr.writerow(['x', x])
+        wr.writerow(['y', y])
     rospy.sleep(5)
