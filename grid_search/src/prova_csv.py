@@ -34,7 +34,7 @@ rospy.init_node('writer_csv')
 
 while not rospy.is_shutdown():
     pos = rospy.Subscriber ('/my_odom', Pose2D, Callback1)
-    param = rospy.Subscriber ('/param', param, Callback2)
+    par = rospy.Subscriber ('/param', param, Callback2)
     i+=1
     csvRow = ['Tentativo' + str(i)]
     csvfile = "data.csv"
