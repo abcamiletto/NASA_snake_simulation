@@ -40,27 +40,27 @@ while not rospy.is_shutdown():
     par = rospy.Subscriber ('/param', param, Callback2)
 
     i = 1
+    if not a_p:
+        rospy.sleep(0.01)
+    else:
+        csvRow0 = ['Tentativo' + str(i)]
+        csvRow1 = ['Amplitude Pitch', a_p]
+        csvRow2 = ['Spatial frequency Pitch', ox_p]
+        csvRow3 = ['Temporal frequency Pitch', ot_p]
+        csvRow4 = ['Amplitude Yaw',a_y]
+        csvRow5 = ['Spatial frequency Yaw', ox_y]
+        csvRow6 = ['Temporal frequency Yaw', ot_y]
+        csvRow7 = ['x', x]
+        csvRow8 = ['y', y]
 
-    csvRow0 = ['Tentativo' + str(i)]
-    csvRow1 = ['Amplitude Pitch', a_p]
-    csvRow2 = ['Spatial frequency Pitch', ox_p]
-    csvRow3 = ['Temporal frequency Pitch', ot_p]
-    csvRow4 = ['Amplitude Yaw', a_y]
-    csvRow5 = ['Spatial frequency Yaw', ox_y]
-    csvRow6 = ['Temporal frequency Yaw', ot_y]
-    csvRow7 = ['x', x]
-    csvRow8 = ['y', y]
-    
-
-    with open(csvfile, 'r') as readFile:
-        read = csv.reader(readFile, dialect='excel')
-        lines = list(read)
-        lines[(i-1)*9] = csvRow0, lines[(i-1)*9+1] = csvRow1, lines[(i-1)*9+2] = csvRow2, lines[(i-1)*9+3] = csvRow3, lines[(i-1)*9+4] = csvRow4, lines[(i-1)*9+5] = csvRow5, lines[(i-1)*9+6] = csvRow6, lines[(i-1)*9+7] = csvRow7, lines[(i-1)*9+8] = csvRow8,
-    with open(csvfile, 'w') as writeFile:
-        wr = csv.writer(writeFile, dialect='excel')
-        wr.writerows = lines
-    i+=1
-    readFile.close()
-    writeFile.close()
-    rospy.sleep(0.2)
-    print (i)
+        with open(csvfile, 'r') as readFile:
+            read = csv.reader(readFile, dialect='excel')
+            lines = list(read)
+            lines[(i-1)*9] = csvRow0
+        with open(csvfile, 'w') as writeFile:
+            wr = csv.writer(writeFile, dialect='excel')
+            wr.writerow = lines
+        i+=1
+        readFile.close()
+        writeFile.close()
+        rospy.sleep(0.2)
