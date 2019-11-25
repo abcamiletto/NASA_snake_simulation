@@ -21,7 +21,6 @@ from control_sn.msg import param
 rospy.init_node('mycontrol')
 
 
-rospy.sleep(2.)
 #2--------------------------------------------------------------------- inizializzo i publisher
 
 motor1p = rospy.Publisher('/snake/snake_body_1_joint_position_controller/command',Float64, queue_size = 121)
@@ -51,13 +50,13 @@ pub_param = rospy.Publisher ('/param', param, queue_size = 1000)
 
 #4--------------------------------------------------------------------- definisco i parametri
 
-a_p = 0.3
-ot_p = 0.8
+a_p = 0.4
+ot_p = 1.8
 ox_p = 0.66
 
-a_y = 0.0
-ot_y = 0.0
-ox_y = 0.0
+a_y = 0.2
+ot_y = 1.8
+ox_y = 0
 
 v_med = 0.0
 
@@ -72,7 +71,10 @@ P.A_y = a_y
 P.Ot_y = ot_y
 P.Ox_y = ox_y
 
+rospy.sleep(0.1)
 pub_param.publish(P)
+
+
 
 #6--------------------------------------------------------------------- pubblico nel topic 
 tic = rospy.Time.now()
@@ -103,6 +105,7 @@ while not rospy.is_shutdown():
     msg7y = a_y*math.sin(t * ot_y + ox_y*6) + v_med
     
     #pubblico
+
     motor1p.publish(msg1p)
     motor2p.publish(msg2p)
     motor3p.publish(msg3p)
@@ -118,6 +121,8 @@ while not rospy.is_shutdown():
     motor5y.publish(msg5y)
     motor6y.publish(msg6y)
     motor7y.publish(msg7y)
+
+
     
     r.sleep()
 
