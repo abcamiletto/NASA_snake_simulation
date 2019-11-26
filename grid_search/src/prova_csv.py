@@ -31,10 +31,11 @@ def Callback2(data):
 
 rospy.init_node('writer_csv')
 
-csvfile = "data.csv"
-with open(csvfile, "w") as writeFile:
+csvfile = "test1.csv"
+with open(csvfile, "wb") as writeFile:
     wr=csv.writer(writeFile, dialect='excel')
     wr.writerows([['a'],['b'],['c'],['d'],['e'],['f'],['g'],['h'],['i']])
+    writeFile.close()
 while not rospy.is_shutdown():
     pos = rospy.Subscriber ('/my_odom', Pose2D, Callback1)
     par = rospy.Subscriber ('/param', param, Callback2)
@@ -43,24 +44,28 @@ while not rospy.is_shutdown():
     if not a_p:
         rospy.sleep(0.01)
     else:
-        csvRow0 = ['Tentativo' + str(i)]
-        csvRow1 = ['Amplitude Pitch', a_p]
-        csvRow2 = ['Spatial frequency Pitch', ox_p]
-        csvRow3 = ['Temporal frequency Pitch', ot_p]
-        csvRow4 = ['Amplitude Yaw',a_y]
-        csvRow5 = ['Spatial frequency Yaw', ox_y]
-        csvRow6 = ['Temporal frequency Yaw', ot_y]
-        csvRow7 = ['x', x]
-        csvRow8 = ['y', y]
+        #csvRow0 = ['Tentativo' + str(i)]
+        #csvRow1 = ['Amplitude Pitch', a_p]
+        #csvRow2 = ['Spatial frequency Pitch', ox_p]
+        #csvRow3 = ['Temporal frequency Pitch', ot_p]
+        #csvRow4 = ['Amplitude Yaw',a_y]
+        #csvRow5 = ['Spatial frequency Yaw', ox_y]
+        #csvRow6 = ['Temporal frequency Yaw', ot_y]
+        #csvRow7 = ['x', x]
+        #csvRow8 = ['y', y]
 
-        with open(csvfile, 'r') as readFile:
+        empty = []
+
+        with open("test1.csv", 'r') as readFile:
             read = csv.reader(readFile, dialect='excel')
-            lines = list(read)
-            lines[(i-1)*9] = csvRow0
-        with open(csvfile, 'w') as writeFile:
+            empty.extend(read)
+            line_to_override = {0:['Tentativo ' + str(i)], 1:['Amplitude Pitch', a_p], 2:['Spatial frequency Pitch', ox_p], 3:['Temporal frequency Pitch', ot_p], 4:['Amplitude Yaw',a_y], 5:['Spatial frequency Yaw', ox_y], 6:['Temporal frequency Yaw', ot_y], 7:['x', x], 8:['y', y]}
+            readFile.close()
+        with open("test1.csv", 'w') as writeFile:
             wr = csv.writer(writeFile, dialect='excel')
-            wr.writerow = lines
+            for line, row in enumerate(empty):
+                data = line_to_override.get(line,row)
+                wr.writerow(data)
+            writeFile.close()
         i+=1
-        readFile.close()
-        writeFile.close()
         rospy.sleep(0.2)
