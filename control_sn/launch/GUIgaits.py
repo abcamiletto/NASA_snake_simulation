@@ -154,9 +154,9 @@ def stop_pub(event):
 def getInput():
     global a_p, ot_p, ox_p, a_y, ot_y, ox_y, v_med, ph, k, timespan
 
-    a_p = float(entry1.get())
-    ot_p = float(entry2.get())
-    ox_p = float(entry3.get())
+    a_p = float(entry1.get()) * 3.14159
+    ot_p = float(entry2.get()) * 3.14159
+    ox_p = float(entry3.get()) * 3.14159
     a_y = float(entry4.get())
     ot_y = float(entry5.get())
     ox_y= float(entry6.get())
