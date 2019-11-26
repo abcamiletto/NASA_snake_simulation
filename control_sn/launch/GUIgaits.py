@@ -1,16 +1,18 @@
+#!/usr/bin/env python
+
 import Tkinter as tk
 from Tkinter import *
-# from operator import truediv
-# import yaml, sys
-# from std_msgs.msg import Float64
-# from numpy import zeros, array, linspace
-# import math
-# import rospkg
-# from gazebo_msgs.srv import DeleteModel, DeleteModelRequest
-# import roslaunch
-# import subprocess
-# from control_sn.msg import param
-# import rospy
+from operator import truediv
+import yaml, sys
+from std_msgs.msg import Float64
+from numpy import zeros, array, linspace
+import math
+import rospkg
+from gazebo_msgs.srv import DeleteModel, DeleteModelRequest
+import roslaunch
+import subprocess
+from control_sn.msg import param
+import rospy
 
 
 a_p = 0
@@ -24,9 +26,9 @@ ph = 0
 k = 0
 
 def init(event):
-    rospy.init_node('mycontrol')
+    global motor1p, motor2p, motor3p, motor4p, motor5p, motor6p, motor7p, motor1y, motor2y, motor3y, motor4y, motor5y, motor6y, motor7y, pub_param
 
-    ros.sleep(2.)
+    rospy.init_node('mycontrol')
 
     motor1p = rospy.Publisher('/snake/snake_body_1_joint_position_controller/command', Float64, queue_size=121)
     motor1y = rospy.Publisher('/snake/snake_body_1_aux_joint_position_controller/command', Float64, queue_size=121)
@@ -51,6 +53,8 @@ def init(event):
 
     pub_param = rospy.Publisher('/param', param, queue_size=1000)
 
+    print("HO INIZIALIZZATO I PUBLISHER")
+
 def start_pub(event):
     # 5--------------------------------------------------------------------- pubblico i parametri
 
@@ -71,6 +75,7 @@ def start_pub(event):
     # 6--------------------------------------------------------------------- pubblico nel topic
     tic = rospy.Time.now()
     toc = rospy.Time.now() - tic
+    print("ORA PUBBLICOOOOO")
     # rateo di pubblicazione in Hz
     r = rospy.Rate(100)
     # da usare quando pubblico
@@ -141,17 +146,17 @@ def stop_pub(event):
         r.sleep()
 
 def getInput():
-    global a_p, ot_p, ox_p, a_y, ot_y, ox_y
+    global a_p, ot_p, ox_p, a_y, ot_y, ox_y, v_med, ph, k
 
-    a_p = entry1.get()
-    ot_p = entry2.get()
-    ox_p = entry3.get()
-    a_y = entry4.get()
-    ot_y = entry5.get()
-    ox_y= entry6.get()
+    a_p = float(entry1.get())
+    ot_p = float(entry2.get())
+    ox_p = float(entry3.get())
+    a_y = float(entry4.get())
+    ot_y = float(entry5.get())
+    ox_y= float(entry6.get())
 
 def LinearProgression():
-    global a_p, ot_p, ox_p, a_y, ot_y, ox_y
+    global a_p, ot_p, ox_p, a_y, ot_y, ox_y, v_med, ph, k
 
     a_p = 0
     ot_p = 0
@@ -159,6 +164,9 @@ def LinearProgression():
     a_y = 0
     ot_y = 0
     ox_y = 0
+    v_med = 0
+    ph = 0
+    k = 0
 
     entry1_var.set(a_p)
     entry2_var.set(ot_p)
@@ -168,7 +176,7 @@ def LinearProgression():
     entry6_var.set(ox_y)
 
 def LateralOndulation():
-    global a_p, ot_p, ox_p, a_y, ot_y, ox_y
+    global a_p, ot_p, ox_p, a_y, ot_y, ox_y, v_med, ph, k
 
     a_p = 0
     ot_p = 0
@@ -176,6 +184,9 @@ def LateralOndulation():
     a_y = 0
     ot_y = 0
     ox_y = 0
+    v_med = 0
+    ph = 0
+    k = 0
 
     entry1_var.set(a_p)
     entry2_var.set(ot_p)
@@ -185,7 +196,7 @@ def LateralOndulation():
     entry6_var.set(ox_y)
 
 def Rolling():
-    global a_p, ot_p, ox_p, a_y, ot_y, ox_y
+    global a_p, ot_p, ox_p, a_y, ot_y, ox_y, v_med, ph, k
 
     a_p = 0
     ot_p = 0
@@ -193,6 +204,9 @@ def Rolling():
     a_y = 0
     ot_y = 0
     ox_y = 0
+    v_med = 0
+    ph = 0
+    k = 0
 
     entry1_var.set(a_p)
     entry2_var.set(ot_p)
@@ -203,7 +217,7 @@ def Rolling():
 
 
 def SideWinding(event):
-    global a_p, ot_p, ox_p, a_y, ot_y, ox_y
+    global a_p, ot_p, ox_p, a_y, ot_y, ox_y, v_med, ph, k
 
     a_p = 0.5
     ot_p = 0.8
@@ -211,6 +225,9 @@ def SideWinding(event):
     a_y = 0.1
     ot_y = 0.8
     ox_y = 0.6
+    v_med = 0.0
+    ph = 0.0
+    k = 0.0
 
     entry1_var.set(a_p)
     entry2_var.set(ot_p)
