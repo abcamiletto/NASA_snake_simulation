@@ -13,6 +13,7 @@ import roslaunch
 import subprocess
 from control_sn.msg import param
 import rospy
+from std_srvs.srv import Empty
 
 
 a_p = 0
@@ -80,7 +81,7 @@ def start_pub(event):
     toc = rospy.Time.now() - tic
     print("ORA PUBBLICOOOOO")
     # rateo di pubblicazione in Hz
-    r = rospy.Rate(100)
+    r = rospy.Rate(120)
     # da usare quando pubblico
     while toc.secs < timespan :
         toc = rospy.Time.now() - tic
@@ -125,31 +126,31 @@ def start_pub(event):
 
 def stop_pub(event):
     # 6--------------------------------------------------------------------- pubblico nel topic
-    tic = rospy.Time.now()
-    toc = rospy.Time.now() - tic
+    #tic = rospy.Time.now()
+    #toc = rospy.Time.now() - tic
     print("ORA PUBBLICOOOOO")
     # rateo di pubblicazione in Hz
-    r = rospy.Rate(100)
+    #r = rospy.Rate(120)
     # da usare quando pubblico
-    while toc.secs < timespan :
+    #while toc.secs < 3 :
         # pubblico
-        motor1p.publish(0.)
-        motor2p.publish(0.)
-        motor3p.publish(0.)
-        motor4p.publish(0.)
-        motor5p.publish(0.)
-        motor6p.publish(0.)
-        motor7p.publish(0.)
+    motor1p.publish(0.)
+    motor2p.publish(0.)
+    motor3p.publish(0.)
+    motor4p.publish(0.)
+    motor5p.publish(0.)
+    motor6p.publish(0.)
+    motor7p.publish(0.)
 
-        motor1y.publish(0.)
-        motor2y.publish(0.)
-        motor3y.publish(0.)
-        motor4y.publish(0.)
-        motor5y.publish(0.)
-        motor6y.publish(0.)
-        motor7y.publish(0.)
+    motor1y.publish(0.)
+    motor2y.publish(0.)
+    motor3y.publish(0.)
+    motor4y.publish(0.)
+    motor5y.publish(0.)
+    motor6y.publish(0.)
+    motor7y.publish(0.)
 
-        r.sleep()
+    #    r.sleep()
 
 def getInput():
     global a_p, ot_p, ox_p, a_y, ot_y, ox_y, v_med, ph, k, timespan
@@ -157,26 +158,50 @@ def getInput():
     a_p = float(entry1.get()) * 3.14159
     ot_p = float(entry2.get()) * 3.14159
     ox_p = float(entry3.get()) * 3.14159
-    a_y = float(entry4.get())
-    ot_y = float(entry5.get())
-    ox_y= float(entry6.get())
-    v_med = float(entry7.get())
-    ph = float(entry8.get())
-    k = float(entry9.get())
-    timespan = float(entry10.get())
+    a_y = float(entry4.get()) * 3.14159
+    ot_y = float(entry5.get()) * 3.14159
+    ox_y= float(entry6.get()) * 3.14159
+    v_med = float(entry7.get()) * 3.14159
+    ph = float(entry8.get()) * 3.14159
+    k = float(entry9.get()) * 3.14159
+    timespan = float(entry10.get()) 
 
     entry10_var.set(timespan)
 
-def LinearProgression():
+def LinearProgression(event):
     global a_p, ot_p, ox_p, a_y, ot_y, ox_y, v_med, ph, k
 
-    a_p = 0
-    ot_p = 0
-    ox_p = 0
-    a_y = 0
-    ot_y = 0
-    ox_y = 0
+    a_p = 0.33
+    ot_p = 0.88
+    ox_p = 0.29
+    a_y = 0.05
+    ot_y = 0.88
+    ox_y = 0.58
     v_med = 0
+    ph = 0
+    k = 0.02
+
+    entry1_var.set(a_p)
+    entry2_var.set(ot_p)
+    entry3_var.set(ox_p)
+    entry4_var.set(a_y)
+    entry5_var.set(ot_y)
+    entry6_var.set(ox_y)
+    entry7_var.set(v_med)
+    entry8_var.set(ph)
+    entry9_var.set(k)
+
+
+def LateralOndulation(event):
+    global a_p, ot_p, ox_p, a_y, ot_y, ox_y, v_med, ph, k
+
+    a_p = 0.33
+    ot_p = 0.88
+    ox_p = 0.29
+    a_y = 0.12
+    ot_y = 0.88
+    ox_y = 0.58
+    v_med = 0.1
     ph = 0
     k = 0
 
@@ -186,26 +211,9 @@ def LinearProgression():
     entry4_var.set(a_y)
     entry5_var.set(ot_y)
     entry6_var.set(ox_y)
-
-def LateralOndulation():
-    global a_p, ot_p, ox_p, a_y, ot_y, ox_y, v_med, ph, k
-
-    a_p = 0
-    ot_p = 0
-    ox_p = 0
-    a_y = 0
-    ot_y = 0
-    ox_y = 0
-    v_med = 0
-    ph = 0
-    k = 0
-
-    entry1_var.set(a_p)
-    entry2_var.set(ot_p)
-    entry3_var.set(ox_p)
-    entry4_var.set(a_y)
-    entry5_var.set(ot_y)
-    entry6_var.set(ox_y)
+    entry7_var.set(v_med)
+    entry8_var.set(ph)
+    entry9_var.set(k)
 
 def Rolling():
     global a_p, ot_p, ox_p, a_y, ot_y, ox_y, v_med, ph, k
@@ -226,6 +234,10 @@ def Rolling():
     entry4_var.set(a_y)
     entry5_var.set(ot_y)
     entry6_var.set(ox_y)
+    entry7_var.set(v_med)
+    entry8_var.set(ph)
+    entry9_var.set(k)
+
 
 
 def SideWinding(event):
@@ -247,13 +259,21 @@ def SideWinding(event):
     entry4_var.set(a_y)
     entry5_var.set(ot_y)
     entry6_var.set(ox_y)
+    entry7_var.set(v_med)
+    entry8_var.set(ph)
+    entry9_var.set(k)
+
+
+def Respawn():
+    reset = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
+    resetta_tutto = reset()
 
 
 
 
 root = tk.Tk()
 root.title("Gaits GUI")
-root.geometry('500x400')
+root.geometry('500x470')
 stline = Frame(root)
 stline.pack(side = TOP)
 ndline = Frame(root)
@@ -274,6 +294,8 @@ ninline = Frame(root)
 ninline.pack(side = TOP)
 mod = Frame(root)
 mod.pack(side = TOP)
+las = Frame(root)
+las.pack(side = TOP)
 bottomFrame = Frame(root)
 bottomFrame.pack(side = BOTTOM)
 
@@ -323,16 +345,18 @@ entry8 = Entry(sevline, text=entry8_var)
 entry9 = Entry(sevline, text=entry9_var)
 lab10 = Label(ninline, text = "TimeSpan")
 entry10 = Entry(ninline, text = entry10_var)
-linprog = Button(mod, text = "Linear Progression")
-latond = Button(mod, text = "Lateral Ondulation")
+linprog = Button(mod, text = "Magia di Kape")
+latond = Button(mod, text = "Magia di Delf")
 roll = Button(mod, text = "Rolling")
 sidwin = Button(mod, text = "Side Winding")
 startpub = Button(bottomFrame, text = "Start Publishing")
 stoppub = Button(bottomFrame, text = "Stop Publishing")
 shut = Button(bottomFrame, text = "Shutdown")
 refresh = Button(eigline, text = "Submit", command = getInput, pady = 10)
+respawn = Button(las, text = "Respawn", command = Respawn, pady = 10)
 
 initi.bind("<Button-1>", init)
+latond.bind("<Button-1>", LateralOndulation)
 startpub.bind("<Button-1>", start_pub)
 stoppub.bind("<Button-1>", stop_pub)
 sidwin.bind("<Button-1>", SideWinding)
@@ -364,10 +388,10 @@ roll.grid(row=9, column=0)
 sidwin.grid(row=9, column=1)
 lab10.grid(row=10, column=0, pady = 10)
 entry10.grid(row=10, column=1)
-startpub.grid(row=11, column=0, pady=20)
-stoppub.grid(row=11, column=1)
-shut.grid(row=11, column=2)
-refresh.grid(row= 12, column = 0, columnspan = 3)
+respawn.grid(row=10, column=0)
+startpub.grid(row=12, column=0, pady=20)
+stoppub.grid(row=12, column=1)
+shut.grid(row=12, column=2)
 root.mainloop()
 
 

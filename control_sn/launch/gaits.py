@@ -50,19 +50,19 @@ pub_param = rospy.Publisher ('/param', param, queue_size = 1000)
 
 #4--------------------------------------------------------------------- definisco i parametri
 
-a_p = 0.4
-ot_p = 1.8
-ox_p = 0.66
+a_p = 0.4 * 3.14159
+ot_p = 1.8 * 3.14159
+ox_p = 0.66 * 3.14159
 
-a_y = 0.2
-ot_y = 1.8
-ox_y = 0
+a_y = 0.2 * 3.14159
+ot_y = 1.8 * 3.14159 
+ox_y = 0 * 3.14159 
 
-v_med = 0.0
-ph = 0
-k = 0
+v_med = 0.0 * 3.14159
+ph = 0 * 3.14159
+k = 0 * 3.14159
 
-counter = 0
+counter = 0 
 
 #5--------------------------------------------------------------------- pubblico i parametri
 
@@ -87,7 +87,7 @@ pub_param.publish(P)
 #6--------------------------------------------------------------------- pubblico nel topic 
 tic = rospy.Time.now()
 # rateo di pubblicazione in Hz
-r = rospy.Rate(100)
+r = rospy.Rate(120)
 #da usare quando pubblico
 while not rospy.is_shutdown():
     
