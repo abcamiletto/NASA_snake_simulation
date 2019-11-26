@@ -44,43 +44,38 @@ motor6y = rospy.Publisher('/snake/snake_body_6_aux_joint_position_controller/com
 motor7p = rospy.Publisher('/snake/snake_body_7_joint_position_controller/command',Float64, queue_size = 121)
 motor7y = rospy.Publisher('/snake/snake_body_7_aux_joint_position_controller/command',Float64, queue_size = 121)
 
-pub_param = rospy.Publisher ('/param', param, queue_size = 1000)
 
 
 
-#4--------------------------------------------------------------------- definisco i parametri
 
-a_p = 0.4 * 3.14159
-ot_p = 1.8 * 3.14159
-ox_p = 0.66 * 3.14159
+#4--------------------------------------------------------------------- ricevo i parametri
 
-a_y = 0.2 * 3.14159
-ot_y = 1.8 * 3.14159 
-ox_y = 0 * 3.14159 
+def Callback2(data):
+    global a_p, ot_p, ox_p, a_y, ot_y, ox_y, V_m, Ph, k, count
+    a = data.A_p
+    b = data.Ot_p
+    c = data.Ox_p
+    d = data.A_y
+    e = data.Ot_y
+    f = data.Ox_y
+    g = data.V_m
+    h = data.Ph
+    i = data.K
+    count = data.COUNTER
 
-v_med = 0.0 * 3.14159
-ph = 0 * 3.14159
-k = 0 * 3.14159
+par = rospy.Subscriber ('/param', param, Callback2)
 
-counter = 0 
+a_p = a * 3.14159
+ot_p = b * 3.14159
+ox_p = c * 3.14159
 
-#5--------------------------------------------------------------------- pubblico i parametri
+a_y = d * 3.14159
+ot_y = e * 3.14159 
+ox_y = f * 3.14159 
 
-P = param()
-
-P.A_p = a_p
-P.Ot_p = ot_p
-P.Ox_p = ox_p
-P.A_y = a_y
-P.Ot_y = ot_y
-P.Ox_y = ox_y
-P.V_m = v_med
-P.Ph = ph
-P.K = k
-P.COUNTER = counter
-
-rospy.sleep(0.1)
-pub_param.publish(P)
+v_med = g * 3.14159
+ph = h * 3.14159
+k = i * 3.14159
 
 
 
