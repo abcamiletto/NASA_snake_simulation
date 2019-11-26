@@ -356,6 +356,7 @@ refresh = Button(eigline, text = "Submit", command = getInput, pady = 10)
 respawn = Button(las, text = "Respawn", command = Respawn, pady = 10)
 
 initi.bind("<Button-1>", init)
+linprog.bind("<Button-1>", LinearProgression)
 latond.bind("<Button-1>", LateralOndulation)
 startpub.bind("<Button-1>", start_pub)
 stoppub.bind("<Button-1>", stop_pub)
