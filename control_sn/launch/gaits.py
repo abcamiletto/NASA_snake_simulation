@@ -13,13 +13,14 @@ from std_msgs.msg import Float64
 from numpy import zeros, array, linspace
 import math
 import rospkg
-from gazebo_msgs.srv import DeleteModel, DeleteModelRequest
-import roslaunch
-import subprocess
 from control_sn.msg import param
+from std_srvs.srv import Empty
+import time
+
 
 rospy.init_node('mycontrol')
 
+time.sleep(15.)
 
 #2--------------------------------------------------------------------- inizializzo i publisher
 
@@ -77,67 +78,92 @@ pub_param = rospy.Publisher('/param', param, queue_size=10)
 #             for k in range()
 
 
-a_p = 0
-ot_p = 0
-ox_p = 0
-a_y = 0
-ot_y = 0
-ox_y = 0
-v_med = 0
-ph = 0
-k = 0
+
+b = 0.88
+c = 0.3
+d = 0.05
+e = 0.88
+f = 0.3
+g = 0
+h = 0
+i = 0
 counter = 1
 
-a = range(25)
-var1span = [(x*0.35/24 + 0.05) for x in a]
+a = range(5)
+var1span = [(x*0.35/5 + 0.05) for x in a]
 
 
 
 
-for a_p in var1span:
+for a in var1span:
 
     print("Tentativo n: " + str(counter) + "/8000 INIZIATO")
     P = param()
 
-    P.A_p = a_p
-    P.Ot_p = ot_p
-    P.Ox_p = ox_p
-    P.A_y = a_y
-    P.Ot_y = ot_y
-    P.Ox_y = ox_y
-    P.V_m = v_med
-    P.Ph = ph
-    P.K = k
+    P.A_p = a
+    P.Ot_p = b
+    P.Ox_p = c
+    P.A_y = d
+    P.Ot_y = e
+    P.Ox_y = f
+    P.V_m = g
+    P.Ph = h
+    P.K = i
     P.COUNTER = counter
 
     rospy.sleep(0.1)
     pub_param.publish(P)
 
-    a_p = a_p * 3.14159
-    ot_p = ot_p * 3.14159
-    ox_p = ox_p * 3.14159
+    a_p = a * 3.14159
+    ot_p = b * 3.14159
+    ox_p = c * 3.14159
 
-    a_y = a_y * 3.14159
-    ot_y = ot_y * 3.14159
-    ox_y = ox_y * 3.14159
+    a_y = d * 3.14159
+    ot_y = e * 3.14159
+    ox_y = f * 3.14159
 
-    v_med = v_med * 3.14159
-    ph = ph * 3.14159
-    k = k * 3.14159
+    v_med = g * 3.14159
+    ph = h * 3.14159
+    k = i * 3.14159
 
 
+    motor1p.publish(0.)
+    motor2p.publish(0.)
+    motor3p.publish(0.)
+    motor4p.publish(0.)
+    motor5p.publish(0.)
+    motor6p.publish(0.)
+    motor7p.publish(0.)
+
+    motor1y.publish(0.)
+    motor2y.publish(0.)
+    motor3y.publish(0.)
+    motor4y.publish(0.)
+    motor5y.publish(0.)
+    motor6y.publish(0.)
+    motor7y.publish(0.)
+
+    reset = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
+    resetta_tutto = reset()
+
+    time.sleep(0.1)
 
     #6--------------------------------------------------------------------- pubblico nel topic
+    sec = 1
+    t = 0
     tic = rospy.Time.now()
     toc = rospy.Time.now() - tic
     # rateo di pubblicazione in Hz
     r = rospy.Rate(120)
     #da usare quando pubblico
-    while toc.secs < 12:
+    while t < 12:
 
         toc = rospy.Time.now() - tic
         t = (toc.secs * (10**9) + toc.nsecs)/(10**9 * 1.0000)
-        print(t)
+        
+        if (sec % 120 == 0):
+            print(str(sec/120))
+
         #ora assegno le sinusoidali al pitch
         msg1p = a_p*math.sin(t * ot_p + ox_p*0)
         msg2p = a_p*math.sin(t * ot_p + ox_p*1)
@@ -174,9 +200,19 @@ for a_p in var1span:
         motor6y.publish(msg6y)
         motor7y.publish(msg7y)
 
+        sec += 1
 
+        pd = True
 
-        r.sleep()
+        while pd:
+            try:
+                r.sleep()
+                pd = False
+            except:
+                pass
+    
+    
+
 
     counter += 1
 

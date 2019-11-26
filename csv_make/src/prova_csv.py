@@ -5,6 +5,7 @@ import rospy
 from geometry_msgs.msg import Pose2D
 from std_msgs.msg import Header
 from control_sn.msg import param
+import time
 
 x = 0
 y = 0
@@ -14,7 +15,9 @@ ox_p = 0
 a_y = 0
 ot_y = 0
 ox_y = 0
-f = 0.2
+f = 0.01
+
+time.sleep(4.)
 
 def Callback1(data):
     global x, y
@@ -37,7 +40,7 @@ def Callback2(data):
 rospy.init_node('writer_csv')
 
 
-with open("test1.csv", "wb") as writeFile:
+with open("/home/andrea/Desktop/results/test1.csv", "wb") as writeFile:
     wr=csv.writer(writeFile, dialect='excel')
     wr.writerows([['a'],['b'],['c'],['d'],['e'],['f'],['g'],['h'],['i'],['j'],['k'],['l']])
     writeFile.close()
@@ -49,28 +52,28 @@ while not rospy.is_shutdown():
     par = rospy.Subscriber ('/param', param, Callback2)
 
     if not a_p:
-        rospy.sleep(0.01)
+        pass
 
     else:
 
-        line_to_override = {(act_count-1)*12:['-------------------------Tentativo ' + str(act_count)], (act_count-1)*12+1:['Amplitude Pitch', a_p], (act_count-1)*12+2:['Spatial frequency Pitch', ox_p], (act_count-1)*12+3:['Temporal frequency Pitch', ot_p], (act_count-1)*12+4:['Amplitude Yaw',a_y], (act_count-1)*12+5:['Spatial frequency Yaw', ox_y], (act_count-1)*12+6:['Temporal frequency Yaw', ot_y], (act_count-1)*12+7:['Mean value', V_m], (act_count-1)*12+8:['Phase', Ph], (act_count-1)*12+9:['Constant', k], (act_count-1)*12+10:['-------------------------x', x], (act_count-1)*12+11:['-------------------------y', y]}
+        line_to_override = {(act_count-1)*12:['-------------------------Tentativo ' + str(act_count)], (act_count-1)*12+1:['Amplitude Pitch', a_p], (act_count-1)*12+2:['Spatial frequency Pitch', ox_p], (act_count-1)*12+3:['Temporal frequency Pitch', ot_p], (act_count-1)*12+4:['Amplitude Yaw',a_y], (act_count-1)*12+5:['Spatial frequency Yaw', ox_y], (act_count-1)*12+6:['Temporal frequency Yaw', ot_y], (act_count-1)*12+7:['Mean value', V_m], (act_count-1)*12+8:['Phase', Ph], (act_count-1)*12+9:['Constant', k], (act_count-1)*12+10:['x', x], (act_count-1)*12+11:['y', y]}
         if act_count == count:
             empty = []
-            with open("test1.csv", 'r') as readFile:
+            with open("/home/andrea/Desktop/results/test1.csv", 'r') as readFile:
                 read = csv.reader(readFile, dialect='excel')
                 empty.extend(read)
                 readFile.close()
-            with open("test1.csv", 'w') as writeFile:
+            with open("/home/andrea/Desktop/results/test1.csv", 'w') as writeFile:
                 wr = csv.writer(writeFile, dialect='excel')
                 for line, row in enumerate(empty):
                     data = line_to_override.get(line,row)
                     wr.writerow(data)
                 writeFile.close()
-            rospy.sleep(f)
+            time.sleep(f)
             
         else:
             act_count = count
-            with open("test1.csv", "a") as fp:
+            with open("/home/andrea/Desktop/results/test1.csv", "a") as fp:
                 wr = csv.writer(fp, dialect="excel")
                 csvRow0 = ['-------------------------Tentativo' + str(act_count)]
                 csvRow1 = ['Amplitude Pitch', a_p]
@@ -82,8 +85,8 @@ while not rospy.is_shutdown():
                 csvRow7 = ['Mean value', V_m]
                 csvRow8 = ['Phase', Ph]
                 csvRow9 = ['Constant', k]
-                csvRow10 = ['-------------------------x', x]
-                csvRow11 = ['-------------------------y', y]
+                csvRow10 = ['x', x]
+                csvRow11 = ['y', y]
                 wr.writerow(csvRow0), wr.writerow(csvRow1), wr.writerow(csvRow2), wr.writerow(csvRow3), wr.writerow(csvRow4), wr.writerow(csvRow5), wr.writerow(csvRow6), wr.writerow(csvRow7), wr.writerow(csvRow8), wr.writerow(csvRow9), wr.writerow(csvRow10), wr.writerow(csvRow11)
                 fp.close()
-            rospy.sleep(f)
+            time.sleep(f)

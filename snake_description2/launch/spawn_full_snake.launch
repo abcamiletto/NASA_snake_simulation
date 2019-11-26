@@ -8,6 +8,9 @@
     <arg name="gui" default="true"/>
     <arg name="headless" default="false"/>
     <arg name="debug" default="false"/> 
+    <!--arg name="real_time_update_rate" default="2750.00"/ -->
+
+
 
     <!-- We resume the logic in empty_world.launch -->
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
@@ -16,6 +19,7 @@
 	    <arg name="paused" value="$(arg paused)"/>
 	    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
 	    <arg name="headless" value="$(arg headless)"/>
+	    <!--arg name="real_time_update_rate" value="$(arg real_time_update_rate)"/ -->
 	    <!-- arg name="world_name" value="$(find task_1)/world/tutorial_testing.world"/ -->
     </include>
 

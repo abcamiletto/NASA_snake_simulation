@@ -7,7 +7,7 @@ from gazebo_msgs.srv import GetLinkState, GetLinkStateRequest
 
 rospy.init_node('odom_pub')
 
-odom_pub=rospy.Publisher ('/my_odom', Pose2D, queue_size = 5)
+odom_pub=rospy.Publisher ('/my_odom', Pose2D, queue_size = 2)
 
 rospy.wait_for_service ('/gazebo/get_link_state')
 get_link_srv = rospy.ServiceProxy('/gazebo/get_link_state', GetLinkState)
@@ -32,7 +32,7 @@ link8 = GetLinkStateRequest()
 link8.link_name='snake_body_8'
 
 
-r = rospy.Rate(0.5)
+r = rospy.Rate(2)
 
 while not rospy.is_shutdown():
     res1 = get_link_srv(link1)
@@ -66,7 +66,6 @@ while not rospy.is_shutdown():
     pos.y = (y1+y2+y3+y4+y5+y6+y7+y8)/8
 
     odom_pub.publish(pos)
-    print("pubblicato")
     
     pd = True
 
