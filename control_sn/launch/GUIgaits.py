@@ -2,18 +2,19 @@
 
 import Tkinter as tk
 from Tkinter import *
-from operator import truediv
-import yaml, sys
-from std_msgs.msg import Float64
-from numpy import zeros, array, linspace
-import math
-import rospkg
-from gazebo_msgs.srv import DeleteModel, DeleteModelRequest
-import roslaunch
-import subprocess
-from control_sn.msg import param
-import rospy
-from std_srvs.srv import Empty
+from ttk import *
+# from operator import truediv
+# import yaml, sys
+# from std_msgs.msg import Float64
+# from numpy import zeros, array, linspace
+# import math
+# import rospkg
+# from gazebo_msgs.srv import DeleteModel, DeleteModelRequest
+# import roslaunch
+# import subprocess
+# from control_sn.msg import param
+# import rospy
+# from std_srvs.srv import Empty
 
 
 a_p = 0
@@ -273,7 +274,10 @@ def Respawn():
 
 root = tk.Tk()
 root.title("Gaits GUI")
-root.geometry('500x470')
+root.geometry('500x430')
+root.style = Style()
+#('clam', 'alt', 'default', 'classic')
+root.style.theme_use("classic")
 stline = Frame(root)
 stline.pack(side = TOP)
 ndline = Frame(root)
@@ -325,21 +329,21 @@ entry10_var.set(timespan)
 
 
 initi = Button(stline, text = "Initializing")
-lab1 = Label(ndline, text = "Ap", padx=0, pady=5)
-lab2 = Label(ndline, text = "Otp", padx=145, pady=5)
-lab3 = Label(ndline, text = "Oxp", padx=0, pady=5)
+lab1 = Label(ndline, text = "Ap")
+lab2 = Label(ndline, text = "Otp")
+lab3 = Label(ndline, text = "Oxp")
 entry1 = Entry(rdline, text=entry1_var)
 entry2 = Entry(rdline, text=entry2_var)
 entry3 = Entry(rdline, text=entry3_var)
-lab4 = Label(forline, text = "Ay", padx=0, pady=5)
-lab5 = Label(forline, text = "Oty", padx=145, pady=5)
-lab6 = Label(forline, text = "Oxy", padx=0, pady=5)
+lab4 = Label(forline, text = "Ay")
+lab5 = Label(forline, text = "Oty")
+lab6 = Label(forline, text = "Oxy")
 entry4 = Entry(fifline, text=entry4_var)
 entry5 = Entry(fifline, text=entry5_var)
 entry6 = Entry(fifline, text=entry6_var)
-lab7 = Label(sixline, text = "Vm", padx=0, pady=5)
-lab8 = Label(sixline, text = "Ph1", padx=145, pady=5)
-lab9 = Label(sixline, text = "Dxl", padx=0, pady=5)
+lab7 = Label(sixline, text = "Vm")
+lab8 = Label(sixline, text = "Ph1")
+lab9 = Label(sixline, text = "Dxl")
 entry7 = Entry(sevline, text=entry7_var)
 entry8 = Entry(sevline, text=entry8_var)
 entry9 = Entry(sevline, text=entry9_var)
@@ -352,8 +356,8 @@ sidwin = Button(mod, text = "Side Winding")
 startpub = Button(bottomFrame, text = "Start Publishing")
 stoppub = Button(bottomFrame, text = "Stop Publishing")
 shut = Button(bottomFrame, text = "Shutdown")
-refresh = Button(eigline, text = "Submit", command = getInput, pady = 10)
-respawn = Button(las, text = "Respawn", command = Respawn, pady = 10)
+refresh = Button(eigline, text = "Submit", command = getInput)
+respawn = Button(las, text = "Respawn", command = Respawn)
 
 initi.bind("<Button-1>", init)
 latond.bind("<Button-1>", LateralOndulation)
