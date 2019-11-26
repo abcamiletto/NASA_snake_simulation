@@ -7,3 +7,4 @@ float64 Ox_y
 float64 V_m
 float64 Ph
 float64 K
+int32 COUNTER

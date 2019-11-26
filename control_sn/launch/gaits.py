@@ -62,6 +62,8 @@ v_med = 0.0
 ph = 0
 k = 0
 
+counter = 0
+
 #5--------------------------------------------------------------------- pubblico i parametri
 
 P = param()
@@ -75,6 +77,7 @@ P.Ox_y = ox_y
 P.V_m = v_med
 P.Ph = ph
 P.K = k
+P.COUNTER = counter
 
 rospy.sleep(0.1)
 pub_param.publish(P)
