@@ -28,8 +28,13 @@ def Callback2(data):
     a_y = data.A_y
     ot_y = data.Ot_y
     ox_y = data.Ox_y
+    V_m = data.V_m
+    Ph
+    k
 
 rospy.init_node('writer_csv')
+pos = rospy.Subscriber ('/my_odom', Pose2D, Callback1)
+par = rospy.Subscriber ('/param', param, Callback2)
 
 csvfile = "test1.csv"
 with open(csvfile, "wb") as writeFile:
@@ -37,8 +42,6 @@ with open(csvfile, "wb") as writeFile:
     wr.writerows([['a'],['b'],['c'],['d'],['e'],['f'],['g'],['h'],['i']])
     writeFile.close()
 while not rospy.is_shutdown():
-    pos = rospy.Subscriber ('/my_odom', Pose2D, Callback1)
-    par = rospy.Subscriber ('/param', param, Callback2)
 
     i = 1
     if not a_p:
@@ -68,4 +71,5 @@ while not rospy.is_shutdown():
                 wr.writerow(data)
             writeFile.close()
         i+=1
-        rospy.sleep(0.2)
+    rospy.sleep(0.2)
+rospy.spin()
