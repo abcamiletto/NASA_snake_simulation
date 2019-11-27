@@ -1,7 +1,7 @@
 <launch>
+	<node name="writer_csv" pkg="csv_make" type="prova_csv.py" output="screen" />
 	<include file="$(find snake_description2)/launch/spawn_full_snake.launch"/>
 	<include file="$(find control_sn)/launch/snake_full_control.launch"/>
 	<node name="odom_pub" pkg="my_odom_publisher" type="odom.py" output="screen" />
-	<node name="writer_csv" pkg="csv_make" type="prova_csv.py" output="screen" />
 	<node name="my_control" pkg="control_sn" type="gaits.py" output="screen" />
 </launch>

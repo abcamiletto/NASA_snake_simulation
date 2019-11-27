@@ -15,9 +15,7 @@ ox_p = 0
 a_y = 0
 ot_y = 0
 ox_y = 0
-f = 0.01
-
-time.sleep(4.)
+f = 0.001
 
 def Callback1(data):
     global x, y
@@ -69,7 +67,7 @@ while not rospy.is_shutdown():
                     data = line_to_override.get(line,row)
                     wr.writerow(data)
                 writeFile.close()
-            time.sleep(f)
+         
             
         else:
             act_count = count
@@ -89,4 +87,4 @@ while not rospy.is_shutdown():
                 csvRow11 = ['y', y]
                 wr.writerow(csvRow0), wr.writerow(csvRow1), wr.writerow(csvRow2), wr.writerow(csvRow3), wr.writerow(csvRow4), wr.writerow(csvRow5), wr.writerow(csvRow6), wr.writerow(csvRow7), wr.writerow(csvRow8), wr.writerow(csvRow9), wr.writerow(csvRow10), wr.writerow(csvRow11)
                 fp.close()
-            time.sleep(f)
+           

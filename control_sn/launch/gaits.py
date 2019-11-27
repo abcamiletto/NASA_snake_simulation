@@ -20,7 +20,7 @@ import time
 
 rospy.init_node('mycontrol')
 
-time.sleep(15.)
+time.sleep(4.)
 
 #2--------------------------------------------------------------------- inizializzo i publisher
 
@@ -78,7 +78,7 @@ pub_param = rospy.Publisher('/param', param, queue_size=10)
 #             for k in range()
 
 
-
+a=0
 b = 0.88
 c = 0.3
 d = 0.05
@@ -89,8 +89,26 @@ h = 0
 i = 0
 counter = 1
 
-a = range(5)
-var1span = [(x*0.35/5 + 0.05) for x in a]
+
+P = param()
+
+P.A_p = a
+P.Ot_p = b
+P.Ox_p = c
+P.A_y = d
+P.Ot_y = e
+P.Ox_y = f
+P.V_m = g
+P.Ph = h
+P.K = i
+P.COUNTER = counter
+
+rospy.sleep(0.1)
+pub_param.publish(P)
+
+
+a = range(30)
+var1span = [(x*0.35/30 + 0.05) for x in a]
 
 
 
@@ -142,11 +160,11 @@ for a in var1span:
     motor5y.publish(0.)
     motor6y.publish(0.)
     motor7y.publish(0.)
-
+    time.sleep(0.15)
     reset = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
     resetta_tutto = reset()
 
-    time.sleep(0.1)
+    time.sleep(0.15)
 
     #6--------------------------------------------------------------------- pubblico nel topic
     sec = 1
@@ -210,10 +228,6 @@ for a in var1span:
                 pd = False
             except:
                 pass
-    
-    
-
-
     counter += 1
 
 
