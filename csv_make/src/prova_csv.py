@@ -22,7 +22,7 @@ time.sleep(4.)
 
 def Callback1(data):
     global x, y
-    x = data.x
+    x = data.x - 0.7
     y = data.y
 
 def Callback2(data):
@@ -54,7 +54,7 @@ while not rospy.is_shutdown():
 
     pos = rospy.Subscriber ('/my_odom', Pose2D, Callback1)
     par = rospy.Subscriber ('/param', param, Callback2)
-    dist = math.sqrt(x*x+y*y)
+    dist = math.sqrt(x**2+y**2)
     dist_rel = math.sqrt((x-act_x)**2+(y-act_y)**2)
     dist_per += dist_rel
     if not a_p:
@@ -64,7 +64,7 @@ while not rospy.is_shutdown():
         
         line_to_override = {(act_count-1)*14:['-------------------------Tentativo ' + str(act_count)], (act_count-1)*14+1:['Amplitude Pitch', a_p], (act_count-1)*14+2:['Spatial frequency Pitch', ox_p], (act_count-1)*14+3:['Temporal frequency Pitch', ot_p], (act_count-1)*14+4:['Amplitude Yaw',a_y], (act_count-1)*14+5:['Spatial frequency Yaw', ox_y], (act_count-1)*14+6:['Temporal frequency Yaw', ot_y], (act_count-1)*14+7:['Mean value', V_m], (act_count-1)*14+8:['Phase', Ph], (act_count-1)*14+9:['Constant', k], (act_count-1)*14+10:['x', round(x,3)], (act_count-1)*14+11:['y', round(y,3)], (act_count-1)*14+12:['Distanza Totale', round(dist,3)], (act_count-1)*14+13:['Distanza Percorsa', round(dist_per,3)]}
         act_x = x
-	act_y = y
+	    act_y = y
         if act_count == count:
             empty = []
             with open("/home/andrea/Desktop/results/test1.csv", 'r') as readFile:
