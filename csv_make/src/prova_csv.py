@@ -7,6 +7,7 @@ from std_msgs.msg import Header
 from control_sn.msg import param
 import time
 import math
+import os
 
 x = 0
 y = 0
@@ -38,10 +39,11 @@ def Callback2(data):
     k = data.K
     count = data.COUNTER
 
+p_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 rospy.init_node('writer_csv')
 
 
-with open("/home/andrea/Desktop/results/test1.csv", "wb") as writeFile:
+with open(str(p_path)+"/results/test2.csv", "wb") as writeFile:
     wr=csv.writer(writeFile, dialect='excel')
     wr.writerow(['Attempt', 'Amplitude Pitch', 'Spatial frequency Pitch', 'Spatial frequency Pitch', 'Amplitude Yaw', 'Spatial frequency Yaw', 'Temporal frequency Yaw', 'Mean value', 'Phase', 'Constant', 'x', 'y', 'Distanza Totale', 'Distanza Percorsa'])
     wr.writerow([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
@@ -68,10 +70,10 @@ while not rospy.is_shutdown():
         act_y = y
         if act_count == count:
             empty = []
-            with open("/home/andrea/Desktop/results/test1.csv", 'r') as readFile:
+            with open(str(p_path)+"/results/test2.csv", 'r') as readFile:
                 read = csv.reader(readFile, dialect='excel')
                 empty.extend(read)
-            with open("/home/andrea/Desktop/results/test1.csv", 'w') as writeFile:
+            with open(str(p_path)+"/results/test2.csv", 'w') as writeFile:
                 wr = csv.writer(writeFile, dialect='excel')
                 for line, row in enumerate(empty):
                     data = line_to_override.get(line, row)
@@ -82,7 +84,7 @@ while not rospy.is_shutdown():
         else:
             act_count = count
             dist_per = 0
-            with open("/home/andrea/Desktop/results/test1.csv", "a") as fp:
+            with open(str(p_path)+"/results/test2.csv", "a") as fp:
                 wr = csv.writer(fp, dialect="excel")
                 line_to_override = ['Tentativo ' + str(act_count), a_p, ox_p, ot_p, a_y, ox_y, ot_y, V_m, Ph, k, round(x,3), round(y,3), round(dist,3), round(dist_per,3)]
                 wr.writerow(line_to_override)
