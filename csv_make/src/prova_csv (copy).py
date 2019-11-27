@@ -43,28 +43,23 @@ rospy.init_node('writer_csv')
 
 with open("/home/andrea/Desktop/results/test1.csv", "wb") as writeFile:
     wr=csv.writer(writeFile, dialect='excel')
-    wr.writerows([['a'],['b'],['c'],['d'],['e'],['f'],['g'],['h'],['i'],['j'],['k'],['l'],['m'],['n']])
+    wr.writerows([['a'],['b'],['c'],['d'],['e'],['f'],['g'],['h'],['i'],['j'],['k'],['l'],['m']])
     writeFile.close()
 
 act_count = 1
-act_x = 0
-act_y = 0
-dist_per = 0
-while not rospy.is_shutdown():
 
+while not rospy.is_shutdown():
     pos = rospy.Subscriber ('/my_odom', Pose2D, Callback1)
     par = rospy.Subscriber ('/param', param, Callback2)
     dist = math.sqrt(x*x+y*y)
-    dist_rel = math.sqrt((x-act_x)**2+(y-act_y)**2)
-    dist_per += dist_rel
+
+
     if not a_p:
         pass
 
     else:
         
-        line_to_override = {(act_count-1)*14:['-------------------------Tentativo ' + str(act_count)], (act_count-1)*14+1:['Amplitude Pitch', a_p], (act_count-1)*14+2:['Spatial frequency Pitch', ox_p], (act_count-1)*14+3:['Temporal frequency Pitch', ot_p], (act_count-1)*14+4:['Amplitude Yaw',a_y], (act_count-1)*14+5:['Spatial frequency Yaw', ox_y], (act_count-1)*14+6:['Temporal frequency Yaw', ot_y], (act_count-1)*14+7:['Mean value', V_m], (act_count-1)*14+8:['Phase', Ph], (act_count-1)*14+9:['Constant', k], (act_count-1)*14+10:['x', round(x,3)], (act_count-1)*14+11:['y', round(y,3)], (act_count-1)*14+12:['Distanza Totale', round(dist,3)], (act_count-1)*14+13:['Distanza Percorsa', round(dist_per,3)]}
-        act_x = x
-	act_y = y
+        line_to_override = {(act_count-1)*13:['-------------------------Tentativo ' + str(act_count)], (act_count-1)*13+1:['Amplitude Pitch', a_p], (act_count-1)*13+2:['Spatial frequency Pitch', ox_p], (act_count-1)*13+3:['Temporal frequency Pitch', ot_p], (act_count-1)*13+4:['Amplitude Yaw',a_y], (act_count-1)*13+5:['Spatial frequency Yaw', ox_y], (act_count-1)*13+6:['Temporal frequency Yaw', ot_y], (act_count-1)*13+7:['Mean value', V_m], (act_count-1)*13+8:['Phase', Ph], (act_count-1)*13+9:['Constant', k], (act_count-1)*13+10:['x', round(x,3)], (act_count-1)*13+11:['y', round(y,3)], (act_count-1)*13+12:['Distanza', round(dist,3)]}
         if act_count == count:
             empty = []
             with open("/home/andrea/Desktop/results/test1.csv", 'r') as readFile:
@@ -95,8 +90,7 @@ while not rospy.is_shutdown():
                 csvRow9 = ['Constant', k]
                 csvRow10 = ['x', x]
                 csvRow11 = ['y', y]
-                csvRow12 = ['Distanza Totale', dist]
-                csvRow13 = ['Distanza Percorsa', dist_per]
-                wr.writerow(csvRow0), wr.writerow(csvRow1), wr.writerow(csvRow2), wr.writerow(csvRow3), wr.writerow(csvRow4), wr.writerow(csvRow5), wr.writerow(csvRow6), wr.writerow(csvRow7), wr.writerow(csvRow8), wr.writerow(csvRow9), wr.writerow(csvRow10), wr.writerow(csvRow11), wr.writerow(csvRow12), wr.writerow(csvRow13)
+                csvRow12 = ['Distanza', dist]
+                wr.writerow(csvRow0), wr.writerow(csvRow1), wr.writerow(csvRow2), wr.writerow(csvRow3), wr.writerow(csvRow4), wr.writerow(csvRow5), wr.writerow(csvRow6), wr.writerow(csvRow7), wr.writerow(csvRow8), wr.writerow(csvRow9), wr.writerow(csvRow10), wr.writerow(csvRow11), wr.writerow(csvRow12)
                 fp.close()
             time.sleep(f)

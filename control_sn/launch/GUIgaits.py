@@ -155,15 +155,15 @@ def stop_pub(event):
 def getInput():
     global a_p, ot_p, ox_p, a_y, ot_y, ox_y, v_med, ph, k, timespan
 
-    a_p = float(entry1.get()) * 3.14159
-    ot_p = float(entry2.get()) * 3.14159
-    ox_p = float(entry3.get()) * 3.14159
-    a_y = float(entry4.get()) * 3.14159
-    ot_y = float(entry5.get()) * 3.14159
-    ox_y= float(entry6.get()) * 3.14159
-    v_med = float(entry7.get()) * 3.14159
-    ph = float(entry8.get()) * 3.14159
-    k = float(entry9.get()) * 3.14159
+    a_p = float(entry1.get()) * 3.14159 / 180
+    ot_p = float(entry2.get()) * 3.14159 / 180
+    ox_p = float(entry3.get()) * 3.14159 / 180
+    a_y = float(entry4.get()) * 3.14159 / 180
+    ot_y = float(entry5.get()) * 3.14159 / 180
+    ox_y= float(entry6.get()) * 3.14159 / 180
+    v_med = float(entry7.get()) * 3.14159 / 180
+    ph = float(entry8.get()) * 3.14159 / 180
+    k = float(entry9.get()) * 3.14159 / 180
     timespan = float(entry10.get()) 
 
     entry10_var.set(timespan)
