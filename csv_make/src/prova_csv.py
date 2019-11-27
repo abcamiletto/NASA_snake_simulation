@@ -43,7 +43,8 @@ rospy.init_node('writer_csv')
 
 with open("/home/andrea/Desktop/results/test1.csv", "wb") as writeFile:
     wr=csv.writer(writeFile, dialect='excel')
-    wr.writerows([['a'],['b'],['c'],['d'],['e'],['f'],['g'],['h'],['i'],['j'],['k'],['l'],['m'],['n']])
+    wr.writerow(['Attempt', 'Amplitude Pitch', 'Spatial frequency Pitch', 'Spatial frequency Pitch', 'Amplitude Yaw', 'Spatial frequency Yaw', 'Temporal frequency Yaw', 'Mean value', 'Phase', 'Constant', 'x', 'y', 'Distanza Totale', 'Distanza Percorsa'])
+    wr.writerow([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
     writeFile.close()
 
 act_count = 1
@@ -62,41 +63,28 @@ while not rospy.is_shutdown():
 
     else:
         
-        line_to_override = {(act_count-1)*14:['-------------------------Tentativo ' + str(act_count)], (act_count-1)*14+1:['Amplitude Pitch', a_p], (act_count-1)*14+2:['Spatial frequency Pitch', ox_p], (act_count-1)*14+3:['Temporal frequency Pitch', ot_p], (act_count-1)*14+4:['Amplitude Yaw',a_y], (act_count-1)*14+5:['Spatial frequency Yaw', ox_y], (act_count-1)*14+6:['Temporal frequency Yaw', ot_y], (act_count-1)*14+7:['Mean value', V_m], (act_count-1)*14+8:['Phase', Ph], (act_count-1)*14+9:['Constant', k], (act_count-1)*14+10:['x', round(x,3)], (act_count-1)*14+11:['y', round(y,3)], (act_count-1)*14+12:['Distanza Totale', round(dist,3)], (act_count-1)*14+13:['Distanza Percorsa', round(dist_per,3)]}
+        line_to_override = {act_count:['Tentativo ' + str(act_count), a_p, ox_p, ot_p, a_y, ox_y, ot_y, V_m, Ph, k, round(x,3), round(y,3), round(dist,3), round(dist_per,3)]}
         act_x = x
-	    act_y = y
+        act_y = y
         if act_count == count:
             empty = []
             with open("/home/andrea/Desktop/results/test1.csv", 'r') as readFile:
                 read = csv.reader(readFile, dialect='excel')
                 empty.extend(read)
-                readFile.close()
             with open("/home/andrea/Desktop/results/test1.csv", 'w') as writeFile:
                 wr = csv.writer(writeFile, dialect='excel')
                 for line, row in enumerate(empty):
-                    data = line_to_override.get(line,row)
+                    data = line_to_override.get(line, row)
                     wr.writerow(data)
                 writeFile.close()
             time.sleep(f)
             
         else:
             act_count = count
+            dist_per = 0
             with open("/home/andrea/Desktop/results/test1.csv", "a") as fp:
                 wr = csv.writer(fp, dialect="excel")
-                csvRow0 = ['-------------------------Tentativo ' + str(act_count)]
-                csvRow1 = ['Amplitude Pitch', a_p]
-                csvRow2 = ['Spatial frequency Pitch', ox_p]
-                csvRow3 = ['Temporal frequency Pitch', ot_p]
-                csvRow4 = ['Amplitude Yaw',a_y]
-                csvRow5 = ['Spatial frequency Yaw', ox_y]
-                csvRow6 = ['Temporal frequency Yaw', ot_y]
-                csvRow7 = ['Mean value', V_m]
-                csvRow8 = ['Phase', Ph]
-                csvRow9 = ['Constant', k]
-                csvRow10 = ['x', x]
-                csvRow11 = ['y', y]
-                csvRow12 = ['Distanza Totale', dist]
-                csvRow13 = ['Distanza Percorsa', dist_per]
-                wr.writerow(csvRow0), wr.writerow(csvRow1), wr.writerow(csvRow2), wr.writerow(csvRow3), wr.writerow(csvRow4), wr.writerow(csvRow5), wr.writerow(csvRow6), wr.writerow(csvRow7), wr.writerow(csvRow8), wr.writerow(csvRow9), wr.writerow(csvRow10), wr.writerow(csvRow11), wr.writerow(csvRow12), wr.writerow(csvRow13)
+                line_to_override = ['Tentativo ' + str(act_count), a_p, ox_p, ot_p, a_y, ox_y, ot_y, V_m, Ph, k, round(x,3), round(y,3), round(dist,3), round(dist_per,3)]
+                wr.writerow(line_to_override)
                 fp.close()
             time.sleep(f)
