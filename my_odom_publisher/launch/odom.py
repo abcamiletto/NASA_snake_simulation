@@ -32,7 +32,7 @@ link8 = GetLinkStateRequest()
 link8.link_name='snake_body_8'
 
 
-r = rospy.Rate(2)
+r = rospy.Rate(30)
 
 while not rospy.is_shutdown():
     res1 = get_link_srv(link1)
