@@ -53,6 +53,7 @@ act_count = 1
 act_x = 0
 act_y = 0
 dist_per = 0
+r = rospy.Rate(100)
 while not rospy.is_shutdown():
 
     pos = rospy.Subscriber ('/my_odom', Pose2D, Callback1)
@@ -79,7 +80,14 @@ while not rospy.is_shutdown():
                     data = line_to_override.get(line, row)
                     wr.writerow(data)
                 writeFile.close()
-            time.sleep(f)
+            pd = True
+
+            while pd:
+                try:
+                    r.sleep()
+                    pd = False
+                except:
+                    pass
             
         else:
             act_count = count
@@ -89,4 +97,11 @@ while not rospy.is_shutdown():
                 line_to_override = ['Tentativo ' + str(act_count), a_p, ox_p, ot_p, a_y, ox_y, ot_y, V_m, Ph, k, round(x,3), round(y,3), round(dist,3), round(dist_per,3)]
                 wr.writerow(line_to_override)
                 fp.close()
-            time.sleep(f)
+            pd = True
+
+            while pd:
+                try:
+                    r.sleep()
+                    pd = False
+                except:
+                    pass
