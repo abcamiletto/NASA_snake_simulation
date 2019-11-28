@@ -173,23 +173,13 @@ for f in ox_y_span:
                     time.sleep(0.1)
                     
                     prova = SwitchControllerRequest()
-                    prova.start_controllers = [""]
+                    prova.start_controllers = ["joint_state_controller"]
                     prova.stop_controllers = ["joint_state_controller"]
                     prova.strictness = 1
   
                     aaa = rospy.ServiceProxy('/snake/controller_manager/switch_controller', SwitchController)
                     resp1 = aaa(prova)
 					
-                    time.sleep(0.1)
-                                      
-                    prova1 = SwitchControllerRequest()
-                    prova1.start_controllers = ["joint_state_controller"]
-                    prova1.stop_controllers = [""]
-                    prova1.strictness = 1
-  
-                    aaa = rospy.ServiceProxy('/snake/controller_manager/switch_controller', SwitchController)
-                    resp2 = aaa(prova1)
-                    
                     time.sleep(0.1)
 
                     # 6--------------------------------------------------------------------- pubblico nel topic

@@ -80,7 +80,7 @@ while not rospy.is_shutdown():
     dist = math.sqrt(x**2+y**2)
     dist_rel = math.sqrt((x-act_x)**2+(y-act_y)**2)
     dist_per += dist_rel
-    en += 1/100 * (tor[0] * v[0] + tor[1] * v[1] + tor[2] * v[2] + tor[3] * v[3] + tor[4] * v[4] + tor[5] * v[5] + tor[6] * v[6] + tor[7] * v[7] + tor[8] * v[8] + tor[9] * v[9] + tor[10] * v[10] + tor[11] * v[11] + tor[12] * v[12] + tor[13] * v[13])
+    en += 1/100 * (torq[0] * vel[0] + torq[1] * vel[1] + torq[2] * vel[2] + torq[3] * vel[3] + torq[4] * vel[4] + torq[5] * vel[5] + torq[6] * vel[6] + torq[7] * vel[7] + torq[8] * vel[8] + torq[9] * vel[9] + torq[10] * vel[10] + torq[11] * vel[11] + torq[12] * vel[12] + torq[13] * vel[13])
     if not a_p:
         pass
 
