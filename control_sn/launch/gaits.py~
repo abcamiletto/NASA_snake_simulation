@@ -22,11 +22,6 @@ rospy.init_node('mycontrol')
 
 time.sleep(4.)
 
-def arange(minim,maxim,step_num):
-
-    a = range(step_num)
-    var = [minim + x*(maxim-minim)/(step_num-1) for x in a]
-    return var
 
 #2--------------------------------------------------------------------- inizializzo i publisher
 
@@ -56,12 +51,15 @@ pub_param = rospy.Publisher('/param', param, queue_size=10)
 
 #definisco le variabili da spazzare
 
-a_p_span = arange(20,60,5)
-a_y_span = arange(7,30,8)
-ox_y_span = arange(27, 162, 4)
-ph_span = arange(0,9,2)
-v_med_span = arange(7,30,8)
-k_span = arange(1.5,7,8)
+a_p_span = [20,30,40,50,60]
+a_y_span = [3.0,6.0,9.0,12.0,15.0,30.0]
+ox_y_span = [27.0,54.0,108.0]
+ph_span = [0,10]
+v_med_span = [0,5,10]
+k_span = [0]
+#ph_span = arange(0.0,9.0,2)
+#v_med_span = arange(7.0,30.0,8)
+#k_span = arange(1.5,7.0,8)
 
 a = 0
 b = 150
@@ -164,13 +162,11 @@ for f in ox_y_span:
                     motor5y.publish(0.)
                     motor6y.publish(0.)
                     motor7y.publish(0.)
-                    time.sleep(0.15)
-                    
-
+                    rospy.sleep(0.15)
                     reset = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
                     resetta_tutto = reset()
 
-                    time.sleep(0.1)
+                    rospy.sleep(0.1)
                     
                     prova = SwitchControllerRequest()
                     prova.start_controllers = ["joint_state_controller"]
@@ -180,7 +176,8 @@ for f in ox_y_span:
                     aaa = rospy.ServiceProxy('/snake/controller_manager/switch_controller', SwitchController)
                     resp1 = aaa(prova)
 					
-                    time.sleep(0.1)
+                    
+                    rospy.sleep(0.1)
 
                     # 6--------------------------------------------------------------------- pubblico nel topic
                     sec = 1
@@ -250,7 +247,7 @@ for f in ox_y_span:
 
                     g = 0
 
-                    print("Tentativo n: " + str(counter) + "/5120 INIZIATO")
+                    print("Tentativo n: " + str(counter) + "/10240 INIZIATO")
                     P = param()
 
                     P.A_p = a
@@ -294,11 +291,21 @@ for f in ox_y_span:
                     motor5y.publish(0.)
                     motor6y.publish(0.)
                     motor7y.publish(0.)
-                    time.sleep(0.15)
+                    rospy.sleep(0.15)
                     reset = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
                     resetta_tutto = reset()
+                    
+                    rospy.sleep(0.1)
+                    
+                    prova = SwitchControllerRequest()
+                    prova.start_controllers = ["joint_state_controller"]
+                    prova.stop_controllers = ["joint_state_controller"]
+                    prova.strictness = 1
+  
+                    aaa = rospy.ServiceProxy('/snake/controller_manager/switch_controller', SwitchController)
+                    resp1 = aaa(prova)
 
-                    time.sleep(0.15)
+                    rospy.sleep(0.1)
 
                     # 6--------------------------------------------------------------------- pubblico nel topic
                     sec = 1

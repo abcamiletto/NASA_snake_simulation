@@ -1,0 +1,4 @@
+<launch>
+	<include file="$(find snake_description2)/launch/spawn_full_snake.launch"/>
+	<include file="$(find control_sn)/launch/snake_full_control.launch"/>
+</launch>

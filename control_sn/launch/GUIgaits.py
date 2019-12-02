@@ -164,22 +164,22 @@ def getInput():
     v_med = float(entry7.get()) * 3.14159 / 180
     ph = float(entry8.get()) * 3.14159 / 180
     k = float(entry9.get()) * 3.14159 / 180
-    timespan = float(entry10.get()) 
+    timespan = float(entry10.get())
 
     entry10_var.set(timespan)
 
 def LinearProgression(event):
     global a_p, ot_p, ox_p, a_y, ot_y, ox_y, v_med, ph, k
 
-    a_p = 0.33
-    ot_p = 0.88
-    ox_p = 0.29
-    a_y = 0.05
-    ot_y = 0.88
-    ox_y = 0.58
-    v_med = 0
-    ph = 0
-    k = 0.02
+    a_p = 60.0
+    ot_p = 150.0
+    ox_p = 54.0
+    a_y = 2.0
+    ot_y = 150.0
+    ox_y = 27.0
+    v_med = 15.0
+    ph = 0.0
+    k = 0.0
 
     entry1_var.set(a_p)
     entry2_var.set(ot_p)
@@ -195,14 +195,14 @@ def LinearProgression(event):
 def LateralOndulation(event):
     global a_p, ot_p, ox_p, a_y, ot_y, ox_y, v_med, ph, k
 
-    a_p = 0.33
-    ot_p = 0.88
-    ox_p = 0.29
-    a_y = 0.12
-    ot_y = 0.88
-    ox_y = 0.58
-    v_med = 0.1
-    ph = 0
+    a_p = 20.0
+    ot_p = 150.0
+    ox_p = 54.0
+    a_y = 30.0
+    ot_y = 150.0
+    ox_y = 54.0
+    v_med = 15.0
+    ph = 15.0
     k = 0
 
     entry1_var.set(a_p)
@@ -215,17 +215,17 @@ def LateralOndulation(event):
     entry8_var.set(ph)
     entry9_var.set(k)
 
-def Rolling():
+def Rolling(event):
     global a_p, ot_p, ox_p, a_y, ot_y, ox_y, v_med, ph, k
 
-    a_p = 0
-    ot_p = 0
-    ox_p = 0
-    a_y = 0
-    ot_y = 0
-    ox_y = 0
-    v_med = 0
-    ph = 0
+    a_p = 70.0
+    ot_p = 150.0
+    ox_p = 54.0
+    a_y = 15.0
+    ot_y = 150.0
+    ox_y = 162.0
+    v_med = 20.0
+    ph = 0.0
     k = 0
 
     entry1_var.set(a_p)
@@ -243,13 +243,13 @@ def Rolling():
 def SideWinding(event):
     global a_p, ot_p, ox_p, a_y, ot_y, ox_y, v_med, ph, k
 
-    a_p = 0.5
-    ot_p = 0.8
-    ox_p = 0.6
-    a_y = 0.1
-    ot_y = 0.8
-    ox_y = 0.6
-    v_med = 0.0
+    a_p = 65.0
+    ot_p = 150.0
+    ox_p = 54.0
+    a_y = 0.0
+    ot_y = 150.0
+    ox_y = 27.0
+    v_med = 15.0
     ph = 0.0
     k = 0.0
 
@@ -345,19 +345,20 @@ entry8 = Entry(sevline, text=entry8_var)
 entry9 = Entry(sevline, text=entry9_var)
 lab10 = Label(ninline, text = "TimeSpan")
 entry10 = Entry(ninline, text = entry10_var)
-linprog = Button(mod, text = "Magia di Kape")
-latond = Button(mod, text = "Magia di Delf")
-roll = Button(mod, text = "Rolling")
-sidwin = Button(mod, text = "Side Winding")
+linprog = Button(mod, text = "Best 1")
+latond = Button(mod, text ="Most Efficient 1")
+roll = Button(mod, text = "Best 2")
+sidwin = Button(mod, text = "Most Efficient 2")
 startpub = Button(bottomFrame, text = "Start Publishing")
-stoppub = Button(bottomFrame, text = "Stop Publishing")
+stoppub = Button(bottomFrame, text = "Straight Position")
 shut = Button(bottomFrame, text = "Shutdown")
-refresh = Button(eigline, text = "Submit", command = getInput, pady = 10)
+refresh = Button(eigline, text = "Submit Values", command = getInput, pady = 10)
 respawn = Button(las, text = "Respawn", command = Respawn, pady = 10)
 
 initi.bind("<Button-1>", init)
 linprog.bind("<Button-1>", LinearProgression)
 latond.bind("<Button-1>", LateralOndulation)
+roll.bind("<Button-1>", Rolling)
 startpub.bind("<Button-1>", start_pub)
 stoppub.bind("<Button-1>", stop_pub)
 sidwin.bind("<Button-1>", SideWinding)
