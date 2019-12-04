@@ -4,7 +4,7 @@
   
   
   <!-- Load joint controller configurations from YAML file to parameter server -->
-  <rosparam file="$(find snake_description2)/scripts/snake_full_control_temp.yaml" command="load"/>
+  <rosparam file="$(find snake_description)/config/snake_full_control.yaml" command="load"/>
 
   <!-- load the controllers -->
 

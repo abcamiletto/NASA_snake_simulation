@@ -1,0 +1,197 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name='snake'>
+    
+    <%
+  # Units for the dimensions of the snake
+  # SI units (length in meters)
+
+  # Geometry
+  number_of_bodies = 100
+  body_length   = 0.1
+  aux_body_length   = 0.05
+  body_radius   = 0.05
+  
+  
+  body_mass   = 0.5
+  body_ixx    = body_mass * (body_radius**2 / 4.0 + body_length**2 / 12.0)
+  body_iyy    = body_mass * (body_radius**2 / 4.0 + body_length**2 / 12.0)
+  body_izz    = body_mass/2.0 * body_radius**2
+  
+  aux_body_mass   = 0.5
+  aux_body_ixx    = aux_body_mass * (body_radius**2 / 4.0 + aux_body_length**2 / 12.0)
+  aux_body_iyy    = aux_body_mass * (body_radius**2 / 4.0 + aux_body_length**2 / 12.0)
+  aux_body_izz    = aux_body_mass/2.0 * body_radius**2
+  
+  # Activate SelfColide
+  self_colide_activate = 1
+
+%>
+    
+    
+    
+    <link name='body_link_0'>
+      <self_collide><%= self_colide_activate %></self_collide>
+      <pose>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass><%= body_mass %></mass>
+        <inertia>
+          <ixx><%= body_ixx %></ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy><%= body_iyy %></iyy>
+          <iyz>0</iyz>
+          <izz><%= body_izz %></izz>
+        </inertia>
+      </inertial>
+      <collision name='base_link_collision_0'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length><%= body_length %></length>
+            <radius><%= body_radius %></radius>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name='base_link_visual_0'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length><%= body_length %></length>
+            <radius><%= body_radius %></radius>
+          </cylinder>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Blue</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+    
+    
+    
+    <% for i in 1..number_of_bodies %>
+      
+    <link name='aux_body_link_<%=i%>'>
+      <self_collide><%= self_colide_activate %></self_collide>
+      <pose>0 0 <%=(2*i-1)*((body_length/2.0)+(aux_body_length/2.0))%> 0 -0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass><%= aux_body_mass %></mass>
+        <inertia>
+          <ixx><%= aux_body_ixx %></ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy><%= aux_body_iyy %></iyy>
+          <iyz>0</iyz>
+          <izz><%= aux_body_izz %></izz>
+        </inertia>
+      </inertial>
+      <collision name='aux_body_link_<%=i%>_collision'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length><%= aux_body_length %></length>
+            <radius><%= body_radius %></radius>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name='aux_body_link_<%=i%>_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length><%= aux_body_length %></length>
+            <radius><%= body_radius %></radius>
+          </cylinder>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Black</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+    
+    
+    <joint name='aux_body_link_<%=i%>_joint' type='revolute'>
+        <pose>0 0 -<%= aux_body_length/2.0 %> 0 0 0</pose>
+      <child>aux_body_link_<%=i%></child>
+      <parent>body_link_<%=i-1%></parent>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit>
+          <lower>-0.785398</lower>
+          <upper>0.785398</upper>
+          <effort>20</effort>
+          <velocity>2</velocity>
+        </limit>
+      </axis>
+    </joint>
+    
+    
+    <link name='body_link_<%=i%>'>
+      <self_collide><%= self_colide_activate %></self_collide>
+      <pose>0 0 <%=(2*i)*((body_length/2.0)+(aux_body_length/2.0))%> 0 -0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 -0 0</pose>
+        <mass><%= body_mass %></mass>
+        <inertia>
+          <ixx><%= body_ixx %></ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy><%= body_iyy %></iyy>
+          <iyz>0</iyz>
+          <izz><%= body_izz %></izz>
+        </inertia>
+      </inertial>
+      <collision name='body_link_<%=i%>_collision'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length><%= body_length %></length>
+            <radius><%= body_radius %></radius>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name='body_link_<%=i%>_visual'>
+        <pose>0 0 0 0 -0 0</pose>
+        <geometry>
+          <cylinder>
+            <length><%= body_length %></length>
+            <radius><%= body_radius %></radius>
+          </cylinder>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/White</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+    
+    
+    <joint name='body_link_<%=i%>_joint' type='revolute'>
+        <pose>0 0 -<%= body_length/2.0 %> 0 0 0</pose>
+      <child>body_link_<%=i%></child>
+      <parent>aux_body_link_<%=i%></parent>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-0.785398</lower>
+          <upper>0.785398</upper>
+          <effort>20</effort>
+          <velocity>2</velocity>
+        </limit>
+      </axis>
+    </joint>
+
+  <% end %>
+  
+  
+  </model>
+</sdf>

@@ -20,16 +20,20 @@
 	    <arg name="headless" value="$(arg headless)"/>
 	    <!--arg name="real_time_update_rate" value="$(arg real_time_update_rate)"/ -->
 	    <!-- arg name="world_name" value="$(find task_1)/world/tutorial_testing.world"/ -->
-    </include>    
+    </include>
+    
     
     <arg name="number_of_elements" default="10" />
     
     
-    <include file="$(find snake_description2)/launch/spawn_xacro.launch">
+    <include file="$(find snake_description)/launch/spawn_xacro.launch">
         <arg name="x" value="0.0" />
         <arg name="y" value="0.0" />
         <arg name="z" value="0.2" />
-        <arg name="xacro_robot_file" value="$(find snake_description2)/robot/snake_controllers_n.urdf.xacro" />
+        <arg name="P" value="1.57079632679"/>
+	    <arg name="Y" value="0"/>
+	    <arg name="R" value="0"/>
+        <arg name="xacro_robot_file" value="$(find snake_description)/robot/snake_controllers_n.urdf.xacro" />
         <arg name="robot_name" value="snake" />
         <arg name="number_of_elements" value="$(arg number_of_elements)" />
     </include>

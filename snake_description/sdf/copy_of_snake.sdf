@@ -1,0 +1,157 @@
+<sdf version='1.5'>
+  <model name='snake'>
+  	
+    <link name='base_link'>
+      <pose>0 0 0.075 0 -0 0</pose>
+      <inertial>
+        <pose>0 0 0.075 0 -0 0</pose>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.00025</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.00025</iyy>
+          <iyz>0</iyz>
+          <izz>0.000125</izz>
+        </inertia>
+      </inertial>
+      <collision name='base_link_collision'>
+        <pose>0 0 0.075 0 -0 0</pose>
+        <geometry>
+            <cylinder>
+            <length>0.15</length>
+            <radius>0.05</radius>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name='base_link_visual'>
+        <pose>0 0 0.075 0 -0 0</pose>
+        <geometry>
+            <cylinder>
+            <length>0.15</length>
+            <radius>0.05</radius>
+          </cylinder>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Red</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+    
+    <link name='snake_body_1_aux'>
+      <pose>0 0 0.075 0 -0 0</pose>
+      <inertial>
+        <pose>0 0 0.075 0 -0 0</pose>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.00025</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.00025</iyy>
+          <iyz>0</iyz>
+          <izz>0.000125</izz>
+        </inertia>
+      </inertial>
+      <collision name='snake_body_1_aux_collision'>
+        <pose>0 0 0.075 0 -0 0</pose>
+        <geometry>
+            <cylinder>
+            <length>0.15</length>
+            <radius>0.05</radius>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name='snake_body_1_aux_visual'>
+        <pose>0 0 0.075 0 -0 0</pose>
+        <geometry>
+            <cylinder>
+            <length>0.15</length>
+            <radius>0.05</radius>
+          </cylinder>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Black</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+    
+    
+    <joint name='snake_body_1_aux_joint' type='revolute'>
+      <child>snake_body_1_aux</child>
+      <parent>base_link</parent>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit>
+          <lower>-1.5708</lower>
+          <upper>1.5708</upper>
+          <effort>1.0</effort>
+          <velocity>0.005</velocity>
+        </limit>
+      </axis>
+    </joint>
+    
+    
+    <link name='snake_body_1'>
+      <pose>0 0 0.075 0 -0 0</pose>
+      <inertial>
+        <pose>0 0 0.075 0 -0 0</pose>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.00025</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.00025</iyy>
+          <iyz>0</iyz>
+          <izz>0.000125</izz>
+        </inertia>
+      </inertial>
+      <collision name='snake_body_1_collision'>
+        <pose>0 0 0.075 0 -0 0</pose>
+        <geometry>
+            <cylinder>
+            <length>0.15</length>
+            <radius>0.05</radius>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name='snake_body_1_visual'>
+        <pose>0 0 0.075 0 -0 0</pose>
+        <geometry>
+            <cylinder>
+            <length>0.15</length>
+            <radius>0.05</radius>
+          </cylinder>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Green</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+    
+    
+    <joint name='snake_body_1_joint' type='revolute'>
+      <child>snake_body_1</child>
+      <parent>snake_body_1_aux</parent>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-1.5708</lower>
+          <upper>1.5708</upper>
+          <effort>1.0</effort>
+          <velocity>0.005</velocity>
+        </limit>
+      </axis>
+    </joint>
+    
+    
+    </model>  
+</sdf>

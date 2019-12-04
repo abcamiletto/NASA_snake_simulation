@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+  
+    <include file="$(find snake_description)/launch/snake_world_empty.launch"/>
+    <include file="$(find snake_description)/launch/init_snake.launch"/>
+
+
+</launch>

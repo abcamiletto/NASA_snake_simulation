@@ -5,10 +5,10 @@
     <arg name="number_of_elements" default="7" />
     <arg name="controller_args" default="joint_state_controller --shutdown-timeout 3" />
     
-    <include file="$(find snake_description2)/launch/spawn_full_snake_n.launch">
+    <include file="$(find snake_description)/launch/spawn_full_snake_n.launch">
         <arg name="number_of_elements" value="$(arg number_of_elements)" />
     </include>
-    <include file="$(find snake_description2)/launch/snake_full_control_n.launch">
+    <include file="$(find snake_description)/launch/snake_full_control_n.launch">
         <arg name="controller_args" value="$(arg controller_args)" />
     </include>
 </launch>

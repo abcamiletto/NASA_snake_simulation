@@ -151,7 +151,7 @@
         <mu1>10.0</mu1>
         <mu2>10.0</mu2>
         <material>Gazebo/Black</material>
-        <self_collide>1</self_collide>
+        <self_collide>0</self_collide>
     </gazebo>
 
 
