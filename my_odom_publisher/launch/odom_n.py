@@ -10,6 +10,8 @@ rospy.init_node('odom_pub')
 odom_pub=rospy.Publisher ('/my_odom', Point, queue_size = 20)
 
 num = rospy.get_param('~number')
+lengh = rospy.get_param('~lengh')
+radius = rospy.get_param('~radius')
 
 rospy.wait_for_service ('/gazebo/get_link_state')
 get_link_srv = rospy.ServiceProxy('/gazebo/get_link_state', GetLinkState)
@@ -40,6 +42,9 @@ while not rospy.is_shutdown():
         pos.y += y[index]/(num+1)
         pos.z += z[index]/(num+1)
 
+
+    pos.x = pos.x - lengh * num / 2 - 0.002
+    pos.z = pos.z - radius
     odom_pub.publish(pos)
 
     pos.x = 0

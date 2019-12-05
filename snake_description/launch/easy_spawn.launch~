@@ -8,6 +8,7 @@
     <arg name="lenght_m" default="0.3" />
     <arg name="mass_m" default="0.1" />
     <arg name="friction_m" default="10.0" />
+    <arg name="max_ef" default="100.0" />
     
     <include file="$(find csv_make)/launch/csv_n.launch">
         <arg name="lenght" value="$(arg number_of_elements)" />
@@ -18,6 +19,7 @@
         <arg name="lenght_m" value="$(arg lenght_m)" />
         <arg name="mass_m" value="$(arg mass_m)" />
         <arg name="friction_m" value="$(arg friction_m)" />
+        <arg name="max_ef" value="$(arg max_ef)" />
     </include>
     <include file="$(find snake_description)/launch/snake_full_control_n.launch">
         <arg name="controller_args" value="$(arg controller_args)" />

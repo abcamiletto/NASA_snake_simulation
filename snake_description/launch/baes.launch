@@ -23,8 +23,10 @@
     </include>
     <include file="$(find my_odom_publisher)/launch/start_odom_n.launch">
         <arg name="number_of_joints" value="$(arg number_of_elements)" />
+        <arg name="diameter_m" value="$(arg diameter_m)" />
+        <arg name="lenght_m" value="$(arg lenght_m)" />
     </include>
-    <include file="$(find control_sn)/launch/research_gaits_n_baes.launch">
+    <include file="$(find control_sn)/launch/baesian.launch">
         <arg name="number_of_motors" value="$(arg number_of_elements)" />
     </include>
     

@@ -43,9 +43,9 @@ z_med = 0.0
 #CALLBACKS FUNCTIONS
 def Callback1(data):
     global x, y, z
-    x = data.x - 0.7
+    x = data.x
     y = data.y
-    z = data.z -0.05
+    z = data.z
 
 def Callback2(data):
     global a_p, ot_p, ox_p, a_y, ot_y, ox_y, V_m, Ph, k, count

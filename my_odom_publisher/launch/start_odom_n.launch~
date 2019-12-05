@@ -3,8 +3,12 @@
 <launch>   
 
     <arg name="number_of_joints" default = "1"/>
+    <arg name="diameter_m" value="$(arg diameter_m)" />
+    <arg name="lenght_m" value="$(arg lenght_m)" />
 	<node name="odom_pub" pkg="my_odom_publisher" type="odom_n.py" respawn="false" output="screen">
 	     <param name="number" value="$(arg number_of_joints)" />
-	<node/>
+	     <param name="radius" value="$(arg diameter_m)" />
+	     <param name="lengh" value="$(arg lenght_m)" />
+	</node>
 
 </launch>
