@@ -9,9 +9,6 @@
     <arg name="mass_m" default="0.1" />
     <arg name="friction_m" default="10.0" />
     
-    <include file="$(find csv_make)/launch/csv_n.launch">
-        <arg name="lenght" value="$(arg number_of_elements)" />
-    </include>
     <include file="$(find snake_description)/launch/spawn_full_snake_n.launch">
         <arg name="number_of_elements" value="$(arg number_of_elements)" />
         <arg name="diameter_m" value="$(arg diameter_m)" />
@@ -22,10 +19,7 @@
     <include file="$(find snake_description)/launch/snake_full_control_n.launch">
         <arg name="controller_args" value="$(arg controller_args)" />
     </include>
-    <include file="$(find my_odom_publisher)/launch/start_odom_n.launch">
-        <arg name="number_of_joints" value="$(arg number_of_elements)" />
-    </include>
-    <include file="$(find control_sn)/launch/research_gaits_n.launch">
+    <include file="$(find control_sn)/launch/GUI_n.launch">
         <arg name="number_of_motors" value="$(arg number_of_elements)" />
     </include>
     

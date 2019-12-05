@@ -24,6 +24,11 @@
     
     
     <arg name="number_of_elements" default="10" />
+    <arg name="diameter_m" default="0.055" />
+    <arg name="lenght_m" default="0.3" />
+    <arg name="mass_m" default="0.1" />
+    <arg name="friction_m" default="10.0" />
+    <arg name="max_ef" default="100.0" />
     
     
     <include file="$(find snake_description)/launch/spawn_xacro.launch">
@@ -36,5 +41,10 @@
         <arg name="xacro_robot_file" value="$(find snake_description)/robot/snake_controllers_n.urdf.xacro" />
         <arg name="robot_name" value="snake" />
         <arg name="number_of_elements" value="$(arg number_of_elements)" />
+        <arg name="diameter_m" value="$(arg diameter_m)" />
+        <arg name="lenght_m" value="$(arg lenght_m)" />
+        <arg name="mass_m" value="$(arg mass_m)" />
+        <arg name="friction_m" value="$(arg friction_m)" />
+        <arg name="max_ef" value="$(arg max_ef)" />
     </include>
 </launch>

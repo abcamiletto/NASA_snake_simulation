@@ -29,7 +29,7 @@ link6.link_name='snake_body_6'
 link7 = GetLinkStateRequest()
 link7.link_name='snake_body_7'
 link8 = GetLinkStateRequest()
-link8.link_name='snake_body_8'
+link8.link_name='startpt'
 
 
 r = rospy.Rate(100)

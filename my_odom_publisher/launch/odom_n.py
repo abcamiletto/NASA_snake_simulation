@@ -9,7 +9,7 @@ rospy.init_node('odom_pub')
 
 odom_pub=rospy.Publisher ('/my_odom', Point, queue_size = 20)
 
-num = rospy.get_param('number')
+num = rospy.get_param('~number')
 
 rospy.wait_for_service ('/gazebo/get_link_state')
 get_link_srv = rospy.ServiceProxy('/gazebo/get_link_state', GetLinkState)
@@ -17,28 +17,34 @@ get_link_srv = rospy.ServiceProxy('/gazebo/get_link_state', GetLinkState)
 pos=Point()
 
 links = {}
-for index in range(num)
-    links[index] = ["link{} = GetLinkStateRequest()".format(index), link{}.link_name='snake_body_{}'.format(index, index)]
+for index in range(num):
+    links[index] = ["link{} = GetLinkStateRequest()".format(index), "link{}.link_name='snake_body_{}'".format(index, index)]
     exec(links[index][0])
     exec(links[index][1])
+exec("link{} = GetLinkStateRequest()".format(num))
+exec("link{}.link_name='startpt'".format(num))
 
 
 r = rospy.Rate(100)
 
 while not rospy.is_shutdown():
-    x = [] * num
-    y = [] * num
-    z = [] * num
-    for index in range(num)
-        exec("res{} = gel_link_srv(link{})".format(index, index))
+    x = [None] * (num+1)
+    y = [None] * (num+1)
+    z = [None] * (num+1)
+    for index in range(num+1):
+        exec("res{} = get_link_srv(link{})".format(index, index))
         exec("x[{}] = res{}.link_state.pose.position.x".format(index, index))
         exec("y[{}] = res{}.link_state.pose.position.y".format(index, index))
         exec("z[{}] = res{}.link_state.pose.position.z".format(index, index))
-        pos.x += x[index]/8
-        pos.y += y[index]/8
-        pos.z += z[index]/8
+        pos.x += x[index]/(num+1)
+        pos.y += y[index]/(num+1)
+        pos.z += z[index]/(num+1)
 
     odom_pub.publish(pos)
+
+    pos.x = 0
+    pos.y = 0
+    pos.z = 0
 
     pd = True
 

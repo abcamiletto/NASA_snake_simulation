@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<launch>
+<launch>   
 
-    <arg name="number_of_elements" value="$(arg number_of_elements)" />
-    <param name="number" value="$(arg number_of_elements)"/>
-	<node name="odom_pub" pkg="my_odom_publisher" type="odom_n.py" respawn="false" output="screen" args="-number $(arg number_of_elements)"/>
-	
+    <arg name="number_of_joints" default = "1"/>
+	<node name="odom_pub" pkg="my_odom_publisher" type="odom_n.py" respawn="false" output="screen">
+	     <param name="number" value="$(arg number_of_joints)" />
+	<node/>
+
 </launch>

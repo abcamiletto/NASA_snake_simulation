@@ -1,6 +1,6 @@
 snake:
   joint_state_controller:
-    publish_rate: 50
+    publish_rate: 100
     type: joint_state_controller/JointStateController
   snake_body_0_aux_joint_position_controller:
     joint: snake_body_0_aux_joint
@@ -39,6 +39,90 @@ snake:
     type: effort_controllers/JointPositionController
   snake_body_2_joint_position_controller:
     joint: snake_body_2_joint
+    pid:
+      d: 0.0
+      i: 10.0
+      p: 10.0
+    type: effort_controllers/JointPositionController
+  snake_body_3_aux_joint_position_controller:
+    joint: snake_body_3_aux_joint
+    pid:
+      d: 0.0
+      i: 10.0
+      p: 10.0
+    type: effort_controllers/JointPositionController
+  snake_body_3_joint_position_controller:
+    joint: snake_body_3_joint
+    pid:
+      d: 0.0
+      i: 10.0
+      p: 10.0
+    type: effort_controllers/JointPositionController
+  snake_body_4_aux_joint_position_controller:
+    joint: snake_body_4_aux_joint
+    pid:
+      d: 0.0
+      i: 10.0
+      p: 10.0
+    type: effort_controllers/JointPositionController
+  snake_body_4_joint_position_controller:
+    joint: snake_body_4_joint
+    pid:
+      d: 0.0
+      i: 10.0
+      p: 10.0
+    type: effort_controllers/JointPositionController
+  snake_body_5_aux_joint_position_controller:
+    joint: snake_body_5_aux_joint
+    pid:
+      d: 0.0
+      i: 10.0
+      p: 10.0
+    type: effort_controllers/JointPositionController
+  snake_body_5_joint_position_controller:
+    joint: snake_body_5_joint
+    pid:
+      d: 0.0
+      i: 10.0
+      p: 10.0
+    type: effort_controllers/JointPositionController
+  snake_body_6_aux_joint_position_controller:
+    joint: snake_body_6_aux_joint
+    pid:
+      d: 0.0
+      i: 10.0
+      p: 10.0
+    type: effort_controllers/JointPositionController
+  snake_body_6_joint_position_controller:
+    joint: snake_body_6_joint
+    pid:
+      d: 0.0
+      i: 10.0
+      p: 10.0
+    type: effort_controllers/JointPositionController
+  snake_body_7_aux_joint_position_controller:
+    joint: snake_body_7_aux_joint
+    pid:
+      d: 0.0
+      i: 10.0
+      p: 10.0
+    type: effort_controllers/JointPositionController
+  snake_body_7_joint_position_controller:
+    joint: snake_body_7_joint
+    pid:
+      d: 0.0
+      i: 10.0
+      p: 10.0
+    type: effort_controllers/JointPositionController
+  snake_body_8_aux_joint_position_controller:
+    joint: snake_body_8_aux_joint
+    pid:
+      d: 0.0
+      i: 10.0
+      p: 10.0
+    type: effort_controllers/JointPositionController
+  snake_body_8_joint_position_controller:
+    joint: snake_body_8_joint
     pid:
       d: 0.0
       i: 10.0
