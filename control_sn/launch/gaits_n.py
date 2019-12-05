@@ -83,7 +83,8 @@ for b in ot_p_span:
                         for h in ph_span:
                             for g in v_med_span:
 
-                                print("Tentativo n: " + str(counter) + "/" + str(tent) + " INIZIATO")
+                                print("TRY n: " + str(counter) + "/" + str(tent) + " STARTED")
+                                print("PARAMETERS:     ( " + str(a)+"_"+str(b)+"_"+str(c)+" )     ( "+str(d)+" "+str(e)+" "+str(f)+" )    ( "+str(g)+" "+str(h)) + " )"
                                 P = param()
 
                                 P.A_p = a
@@ -149,7 +150,7 @@ for b in ot_p_span:
                                 r = rospy.Rate(100)
 
                                 # da usare quando pubblico
-                                while t < 4:
+                                while t < 15:
 
                                     toc = rospy.Time.now() - tic
                                     t = (toc.secs * (10 ** 9) + toc.nsecs) / (10 ** 9 * 1.0000)
