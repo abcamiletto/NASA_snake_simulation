@@ -35,10 +35,14 @@ rospy.Subscriber('/snake/joint_states', JointState, Callback3)
 
 #GRID SEARCH PARAMETERS
 a_p_span = [60.0] #20,25,30,35,40,45
+ot_p_span = [150.0]
+ox_p_span = [54.0]
 a_y_span = [2.0]
+ot_y_span = [150.0]
 ox_y_span = [27.0,54.0] #108,162
 ph_span = [0.0]
 v_med_span = [15.0]
+
 k_span = [0]
 
 a = 0
@@ -70,121 +74,124 @@ pub_param.publish(P)
 rospy.sleep(0.3)
 
 # GRID SEARCH
-for f in ox_y_span:
-    for a in a_p_span:
-        for d in a_y_span:
-            for h in ph_span:
-                for g in v_med_span:
+for b in ot_p_span:
+    for e in ot_y_span:
+        for c in ox_p_span:
+            for f in ox_y_span:
+                for a in a_p_span:
+                    for d in a_y_span:
+                        for h in ph_span:
+                            for g in v_med_span:
 
-                    print("Tentativo n: " + str(counter) + "/10800 INIZIATO")
-                    P = param()
+                                print("Tentativo n: " + str(counter) + "/10800 INIZIATO")
+                                P = param()
 
-                    P.A_p = a
-                    P.Ot_p = b
-                    P.Ox_p = c
-                    P.A_y = d
-                    P.Ot_y = e
-                    P.Ox_y = f
-                    P.V_m = g
-                    P.Ph = h
-                    P.K = i
-                    P.COUNTER = counter
-                    pub_param.publish(P)
+                                P.A_p = a
+                                P.Ot_p = b
+                                P.Ox_p = c
+                                P.A_y = d
+                                P.Ot_y = e
+                                P.Ox_y = f
+                                P.V_m = g
+                                P.Ph = h
+                                P.K = i
+                                P.COUNTER = counter
+                                pub_param.publish(P)
 
-                    a_p = a * 3.14159 / 180
-                    ot_p = b * 3.14159 / 180
-                    ox_p = c * 3.14159 / 180
+                                a_p = a * 3.14159 / 180
+                                ot_p = b * 3.14159 / 180
+                                ox_p = c * 3.14159 / 180
 
-                    a_y = d * 3.14159 / 180
-                    ot_y = e * 3.14159 / 180
-                    ox_y = f * 3.14159 / 180
+                                a_y = d * 3.14159 / 180
+                                ot_y = e * 3.14159 / 180
+                                ox_y = f * 3.14159 / 180
 
-                    v_med = g * 3.14159 / 180
-                    ph = h * 3.14159 / 180
-                    k = i * 3.14159 / 180
+                                v_med = g * 3.14159 / 180
+                                ph = h * 3.14159 / 180
+                                k = i * 3.14159 / 180
 
-                    #STRAIGHT LINE
-                    for i in range(num):
-                        exec("motor{}p.publish(0.)".format(i))
-                        exec("motor{}y.publish(0.)".format(i))
+                                #STRAIGHT LINE
+                                for i in range(num):
+                                    exec("motor{}p.publish(0.)".format(i))
+                                    exec("motor{}y.publish(0.)".format(i))
 
 
-                    pd = True
-                    while pd:
-                        try:
-                            rospy.sleep(0.05)
-                            pd = False
-                        except:
-                            pass
+                                pd = True
+                                while pd:
+                                    try:
+                                        rospy.sleep(0.05)
+                                        pd = False
+                                    except:
+                                        pass
 
-                    #SNAKE RESPAWN
+                                #SNAKE RESPAWN
 
-                    reset = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
-                    resetta_tutto = reset()
+                                reset = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
+                                resetta_tutto = reset()
 
-                    #JOINT_STATE_PUBLISHER RESPAWN (TO AVOID GAZEBO BUG)
-                    respawn = SwitchControllerRequest()
-                    respawn.start_controllers = ["joint_state_controller"]
-                    respawn.stop_controllers = ["joint_state_controller"]
-                    respawn.strictness = 1
+                                #JOINT_STATE_PUBLISHER RESPAWN (TO AVOID GAZEBO BUG)
+                                respawn = SwitchControllerRequest()
+                                respawn.start_controllers = ["joint_state_controller"]
+                                respawn.stop_controllers = ["joint_state_controller"]
+                                respawn.strictness = 1
 
-                    aaa = rospy.ServiceProxy('/snake/controller_manager/switch_controller', SwitchController)
-                    resp1 = aaa(respawn)
+                                aaa = rospy.ServiceProxy('/snake/controller_manager/switch_controller', SwitchController)
+                                resp1 = aaa(respawn)
 
-                    # PUBLISHING
+                                # PUBLISHING
 
-                    sec = 1
-                    t = 0
-                    tic = rospy.Time.now()
-                    toc = rospy.Time.now() - tic
+                                sec = 1
+                                t = 0
+                                tic = rospy.Time.now()
+                                toc = rospy.Time.now() - tic
 
-                    # rateo di pubblicazione in Hz
-                    r = rospy.Rate(100)
+                                # rateo di pubblicazione in Hz
+                                r = rospy.Rate(100)
 
-                    # da usare quando pubblico
-                    while t < 4:
+                                # da usare quando pubblico
+                                while t < 4:
 
-                        toc = rospy.Time.now() - tic
-                        t = (toc.secs * (10 ** 9) + toc.nsecs) / (10 ** 9 * 1.0000)
+                                    toc = rospy.Time.now() - tic
+                                    t = (toc.secs * (10 ** 9) + toc.nsecs) / (10 ** 9 * 1.0000)
 
-                        if (sec % 100 == 0):
-                            print(str(sec / 100))
+                                    if (sec % 100 == 0):
+                                        print(str(sec / 100))
 
-                        #PUBLISHING THE ADJUSTED ENERGY
-                        pace = [0]*(num * 2)
+                                    #PUBLISHING THE ADJUSTED ENERGY
+                                    pace = [0]*(num * 2)
 
-                        for i in range(num*2):
+                                    for i in range(num*2):
 
-                            if (i % 2) == 0:
-                                exec("pace[{}] = a_y * ot_y * math.cos(t * ot_y + ox_y * {})".format(i,i/2))
-                            else:
-                                exec("pace[{}] = a_p * ot_p * math.cos(t * ot_p + ox_p * {} + ph)".format(i,(i-1)/2))
+                                        if (i % 2) == 0:
+                                            exec("pace[{}] = a_y * ot_y * math.cos(t * ot_y + ox_y * {})".format(i,i/2))
+                                        else:
+                                            exec("pace[{}] = a_p * ot_p * math.cos(t * ot_p + ox_p * {} + ph)".format(i,(i-1)/2))
 
-                        pot = multiply(pace, tor)
-                        watt = JointState()
-                        watt.effort = pot
-                        en_consuption.publish(watt)
+                                    pot = multiply(pace, tor)
+                                    watt = JointState()
+                                    watt.effort = pot
+                                    en_consuption.publish(watt)
 
-                        # DEFINING THE MOVEMENTS
+                                    # DEFINING THE MOVEMENTS
 
-                        for i in range(num):
-                            exec("msg{}p = a_p * math.sin(t * ot_p + ox_p * {})".format(i,i))
-                            exec("msg{}y = a_y * math.sin(t * ot_y + ox_y * {} + ph) + v_med + {}*k".format(i,i,i))
+                                    for i in range(num):
+                                        exec("msg{}p = a_p * math.sin(t * ot_p + ox_p * {})".format(i,i))
+                                        exec("msg{}y = a_y * math.sin(t * ot_y + ox_y * {} + ph) + v_med + {}*k".format(i,i,i))
 
-                        # PUBLISHING
+                                    # PUBLISHING
 
-                        for i in range(num):
-                            exec("motor{}p.publish(msg{}p)".format(i,i))
-                            exec("motor{}y.publish(msg{}y)".format(i,i))
+                                    for i in range(num):
+                                        exec("motor{}p.publish(msg{}p)".format(i,i))
+                                        exec("motor{}y.publish(msg{}y)".format(i,i))
 
-                        sec += 1
+                                    sec += 1
 
-                        pd = True
-                        while pd:
-                            try:
-                                r.sleep()
-                                pd = False
-                            except:
-                                pass
+                                    pd = True
+                                    while pd:
+                                        try:
+                                            r.sleep()
+                                            pd = False
+                                        except:
+                                            pass
 
-                    counter += 1
+                                counter += 1

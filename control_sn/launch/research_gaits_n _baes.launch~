@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>   
+
+    <arg name="number_of_motors" default = "1"/>
+	<node name="my_control" pkg="control_sn" type="gaits_n.py" respawn="false" output="screen">
+	     <param name="numb" value="$(arg number_of_motors)" />
+	</node>
+
+</launch>
