@@ -105,7 +105,7 @@ def generate_controllerconfig_yamlfile(num_elements, controllerconfig_yaml_filen
 
     #DEFINING A DIRECTORY and file name
     dir = os.path.dirname(os.path.dirname(os.getcwd()))
-    path = dir + "/src/snake_description/scripts/" + controllerconfig_yaml_filename
+    path = dir + "/snake_description/scripts/" + controllerconfig_yaml_filename
     data = generate_controllerconfig_yaml_dict(num_elements)
     fill_yaml_with_datadict(data, path)
 

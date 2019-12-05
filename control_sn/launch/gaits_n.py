@@ -36,7 +36,7 @@ rospy.Subscriber('/snake/joint_states', JointState, Callback3)
 #GRID SEARCH PARAMETERS
 a_p_span = [20.0, 30.0, 40.0, 50.0, 60.0] #20,25,30,35,40,45
 ot_p_span = [150.0]
-ox_p_span = [20.0,40.0,60.0]
+ox_p_span = [20.0,40.0,50.0]
 a_y_span = [0.0, 5.0, 10.0, 25.0]
 ot_y_span = [150.0]
 ox_y_span = [20.0, 40.0, 60.0] #108,162
@@ -83,7 +83,7 @@ for b in ot_p_span:
                         for h in ph_span:
                             for g in v_med_span:
 
-                                print("Tentativo n: " + str(counter) + "/" + str(tent) " INIZIATO")
+                                print("Tentativo n: " + str(counter) + "/" + str(tent) + " INIZIATO")
                                 P = param()
 
                                 P.A_p = a
