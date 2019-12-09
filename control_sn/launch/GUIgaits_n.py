@@ -30,9 +30,10 @@ counter = 0
 timespan = 6
 
 rospy.init_node('mycontrol')
+global num
 num = rospy.get_param('~numb')
 
-global pub_param, num
+global num
 for i in range(num):
     exec("global motor{}p, motor{}p".format(i,i))
 
@@ -292,7 +293,6 @@ stoppub.bind("<Button-1>", stop_pub)
 sidwin.bind("<Button-1>", SideWinding)
 
 
-initi.grid(columnspan = 3)
 lab1.grid(row=1, column=0)
 lab2.grid(row=1, column=1)
 lab3.grid(row=1, column=2)

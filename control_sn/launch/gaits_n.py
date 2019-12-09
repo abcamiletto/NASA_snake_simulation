@@ -53,7 +53,7 @@ e = 150.0
 f = 0
 g = 0
 h = 0
-noneed = 0
+noneed = 0.0
 counter = 1
 
 #BUG AVOIDANCE
