@@ -30,7 +30,7 @@ Before continuing source your new setup.*sh file, or add the path to the bashrc 
 Download it from github
 ```
 cd ~/eels_ws/src
-git clone https://github.com/abcamiletto/snake.git
+git clone https://github.com/abcamiletto/snake.git .
 ```
 For running the Bayesian optimization you need to clone the following repository and install the python module:
 ```
