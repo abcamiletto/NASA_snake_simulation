@@ -84,7 +84,7 @@ for b in ot_p_span:
                             for g in v_med_span:
 
                                 print("TRY n: " + str(counter) + "/" + str(tent) + " STARTED")
-                                print("PARAMETERS:     ( " + str(a)+"_"+str(b)+"_"+str(c)+" )     ( "+str(d)+" "+str(e)+" "+str(f)+" )    ( "+str(g)+" "+str(h)) + " )"
+                                print("PARAMETERS:     ( " + str(a)+"  "+str(b)+"  "+str(c)+" )     ( "+str(d)+"  "+str(e)+"  "+str(f)+" )    ( "+str(g)+"  "+str(h)) + " )"
                                 P = param()
 
                                 P.A_p = a
