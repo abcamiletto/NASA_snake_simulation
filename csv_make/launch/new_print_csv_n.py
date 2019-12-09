@@ -72,7 +72,7 @@ rospy.Subscriber('/param', param, Callback2)
 #WRITING THE FIRST LINE
 with open(path, "wb") as writeFile:
     wr=csv.writer(writeFile, dialect='excel')
-    wr.writerow(['Attempt', 'x', 'y', 'Total Distance', 'Traveled space','Height Variation Stability', 'Mean Height', 'Amplitude Pitch', 'Time frequency Pitch', 'Spatial frequency Pitch', 'Amplitude Yaw', 'Time frequency Yaw', 'Spatial frequency Yaw', 'Mean value', 'Phase', 'Constant', 'Total Energy', 'Pitch Energy', 'Yaw Energy'])
+    wr.writerow(['Attempt', 'x', 'y', 'Total Distance', 'Traveled space','Height Variation Stability', 'Mean Height', 'Amplitude Pitch', 'Time frequency Pitch', 'Spatial frequency Pitch', 'Amplitude Yaw', 'Time frequency Yaw', 'Spatial frequency Yaw', 'Mean value', 'Phase', 'Constant', 'Total Energy', 'Pitch Energy', 'Yaw Energy', 'Efficency'])
     writeFile.close()
 
 #PARAMETERS I NEED
@@ -160,7 +160,7 @@ while not rospy.is_shutdown():
         elif (count == act_count +1):
             #I WRITE THE RESULTS
             #LINE TO BE WRITTEN
-            line_to_override = ['Tentativo ' + str(act_count), round(x_1,3), round(y_1,3), round(math.sqrt(act_x**2+act_y**2),3), round(dist_per,3),round(dist_z_per,3), round(z_med,4), a_p_1, ot_p_1, ox_p_1, a_y_1, ot_y_1, ox_y_1, V_m_1, Ph_1, k_1,round(en_p/200+en_y/200,3), round(en_p/200,3), round(en_y/200,3)]
+            line_to_override = ['Tentativo ' + str(act_count), round(x_1,3), round(y_1,3), round(math.sqrt(act_x**2+act_y**2),3), round(dist_per,3),round(dist_z_per,3), round(z_med / 3 ,3), a_p_1, ot_p_1, ox_p_1, a_y_1, ot_y_1, ox_y_1, V_m_1, Ph_1, k_1,round(en_p/200+en_y/200,3), round(en_p/200,3), round(en_y/200,3), round(y_1/(en_p/200+en_y/200), 3)]
 
             #APPENDING A NEW LINE
             with open(path, "a") as fp:
