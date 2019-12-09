@@ -24,5 +24,10 @@
     <include file="$(find control_sn)/launch/GUI_n.launch">
         <arg name="number_of_motors" value="$(arg number_of_elements)" />
     </include>
+    <include file="$(find my_odom_publisher)/launch/start_odom_n.launch">
+        <arg name="number_of_joints" value="$(arg number_of_elements)" />
+        <arg name="diameter_m" value="$(arg diameter_m)" />
+        <arg name="lenght_m" value="$(arg lenght_m)" />
+    </include>
     
 </launch>
