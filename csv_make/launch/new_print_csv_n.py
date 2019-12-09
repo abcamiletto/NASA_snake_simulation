@@ -14,7 +14,7 @@ leng = rospy.get_param('~leng')
 
 #DEFINING A DIRECTORY and file name
 dir = os.path.dirname(os.path.expanduser("~/Desktop"))
-filenm = "PROVA_NNNNNNNN"
+filenm = "grid_search_results"
 path = dir + "/Desktop/results/" + filenm + ".csv"
 
 #GLOBAL PARAMATERS
@@ -125,10 +125,15 @@ while not rospy.is_shutdown():
 
                 #ENERGY COMPUTING
             for indx in range(0,leng):
-                if power[int(2*indx)] > 0 and power[int(2*indx)] < 0.5:
+                if power[int(2*indx)] > 0 and power[int(2*indx)] < 0.9:
                     en_y += power[int(2*indx)]
-                if power[int(2*indx+1)] > 0 and power[int(2*indx+1)] < 0.5 :
+                elif power[int(2*indx)] < 0 and power[int(2*indx)] > -0.9:
+                    en_y += -power[int(2*indx)]
+
+                if power[int(2*indx+1)] > 0 and power[int(2*indx+1)] < 0.9:
                     en_p += power[int(2*indx+1)]
+                elif power[int(2*indx+1)] < 0 and power[int(2*indx+1)] < -0.9:
+                    en_p += -power[int(2*indx+1)]
 
                     #HEIGHT TOTAL VARIATION COMPUTING
             if (dist_z_rel < 0.1) :
