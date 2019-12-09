@@ -167,13 +167,12 @@
         <self_collide>0</self_collide>
     </gazebo>
 
- <joint name="noreal" type="revolute">
+ <joint name="noreal" type="fixed">
     	    <parent link="startpt"/>
             <child link="snake_body_${NumberOfElements}"/>
             <origin xyz="0 0 0.002" rpy="0 0 0"/>
-            <limit lower="-100" upper="100" effort="${maxeffort}" velocity="0.5"/>
-            <axis xyz="0 0 1"/>
     </joint>
+    
 
 	<link name="snake_body_${NumberOfElements}">
      	   <inertial>
