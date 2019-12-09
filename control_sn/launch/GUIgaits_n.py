@@ -40,39 +40,12 @@ for i in range(num):
         exec("motor{}p = rospy.Publisher('/snake/snake_body_{}_joint_position_controller/command',Float64, queue_size = 121)".format(i,i))
         exec("motor{}y = rospy.Publisher('/snake/snake_body_{}_aux_joint_position_controller/command',Float64, queue_size = 121)".format(i,i))
 
-pub_param = rospy.Publisher('/param', param, queue_size=1000)
+print("HO INIZIALIZZATO I PUBLISHER")
 
 
-def init(event):
 
-    rospy.init_node('mycontrol')
-    num = rospy.get_param('~numb')
-
-    for i in range(num):
-        exec("motor{}p = rospy.Publisher('/snake/snake_body_{}_joint_position_controller/command',Float64, queue_size = 121)".format(i,i))
-        exec("motor{}y = rospy.Publisher('/snake/snake_body_{}_aux_joint_position_controller/command',Float64, queue_size = 121)".format(i,i))
-
-    pub_param = rospy.Publisher('/param', param, queue_size=1000)
-
-    print("HO INIZIALIZZATO I PUBLISHER")
 
 def start_pub(event):
-    # 5--------------------------------------------------------------------- pubblico i parametri
-
-    P = param()
-
-    P.A_p = a_p
-    P.Ot_p = ot_p
-    P.Ox_p = ox_p
-    P.A_y = a_y
-    P.Ot_y = ot_y
-    P.Ox_y = ox_y
-    P.V_m = v_med
-    P.Ph = ph
-    P.K = k
-    P.COUNTER = counter
-
-    pub_param.publish(P)
 
     # 6--------------------------------------------------------------------- pubblico nel topic
     tic = rospy.Time.now()
@@ -279,7 +252,7 @@ entry10_var.set(timespan)
 
 
 
-initi = Button(stline, text = "Initializing")
+
 lab1 = Label(ndline, text = "Ap", padx=0, pady=5)
 lab2 = Label(ndline, text = "Otp", padx=145, pady=5)
 lab3 = Label(ndline, text = "Oxp", padx=0, pady=5)
@@ -310,7 +283,7 @@ shut = Button(bottomFrame, text = "Shutdown")
 refresh = Button(eigline, text = "Submit Values", command = getInput, pady = 10)
 respawn = Button(las, text = "Respawn", command = Respawn, pady = 10)
 
-initi.bind("<Button-1>", init)
+
 linprog.bind("<Button-1>", LinearProgression)
 latond.bind("<Button-1>", LateralOndulation)
 roll.bind("<Button-1>", Rolling)
