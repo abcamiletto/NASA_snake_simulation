@@ -34,7 +34,7 @@ git clone https://github.com/abcamiletto/snake.git .
 ```
 For running the Bayesian optimization you need to clone the following repository and install the python module:
 ```
-cd ~/snake/src/snake/control_sn
+cd ~/eels_ws/src/control_sn
 git clone https://github.com/fmfn/BayesianOptimization.git
 pip install bayesian-optimization
 ```
