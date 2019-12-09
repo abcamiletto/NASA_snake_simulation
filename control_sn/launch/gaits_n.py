@@ -112,9 +112,9 @@ for b in ot_p_span:
                                 k = i * 3.14159 / 180
 
                                 #STRAIGHT LINE
-                                for i in range(num):
-                                    exec("motor{}p.publish(0.)".format(i))
-                                    exec("motor{}y.publish(0.)".format(i))
+                                for pm in range(num):
+                                    exec("motor{}p.publish(0.)".format(pm))
+                                    exec("motor{}y.publish(0.)".format(pm))
 
 
                                 pd = True
