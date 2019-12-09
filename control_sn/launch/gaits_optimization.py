@@ -13,7 +13,7 @@ from std_srvs.srv import Empty
 import time
 from controller_manager_msgs.srv import SwitchController, SwitchControllerRequest
 from sensor_msgs.msg import JointState
-from bayes_opt.bayesian_optimization import BayesianOptimization
+from bayes_opt import BayesianOptimization
 
 def Callback1(data):
     global x, y
@@ -27,7 +27,6 @@ def Callback3(data):
 rospy.init_node('mycontrol')
 num = rospy.get_param('~numb')
 time.sleep(6.0)
-tor = [0] * (num * 2)
 #INIT PUBLISHER
 for i in range(num):
     exec("motor{}p = rospy.Publisher('/snake/snake_body_{}_joint_position_controller/command',Float64, queue_size = 121)".format(i,i))
@@ -69,20 +68,23 @@ rospy.sleep(0.1)
 pub_param.publish(P)
 rospy.sleep(0.3)
 
-v_1 = float(raw_input("Velocita' che si desidera raggiungere: "))
+n_pti_rand = int(raw_input("Numero di punti iniziali randomici: "))
+n_iteraz = int(raw_input("Numero di iterazioni: "))
+global fre
+fre = float(raw_input("Inserire la frequenza temporale del pitch e dello yaw: "))
 
 bounds_choose = raw_input("Vuoi scegliere gli intervalli dei parametri?:\n[y/n]")
 if bounds_choose == 'y':
     amp_p1 = float(raw_input("Ampiezza pitch1: "))
     amp_p2 = float(raw_input("Ampiezza pitch2: "))
-    omt_p1 = float(raw_input("Frequenza temporale pitch1: "))
-    omt_p2 = float(raw_input("Frequenza temporale pitch2: "))
+    # omt_p1 = float(raw_input("Frequenza temporale pitch1: "))
+    # omt_p2 = float(raw_input("Frequenza temporale pitch2: "))
     omx_p1 = float(raw_input("Frequenza spaziale pitch1: "))
     omx_p2 = float(raw_input("Frequenza spaziale pitch2: "))
     amp_y1 = float(raw_input("Ampiezza yaw1: "))
     amp_y2 = float(raw_input("Ampiezza yaw2: "))
-    omt_y1 = float(raw_input("Frequenza temporale yaw1: "))
-    omt_y2 = float(raw_input("Frequenza temporale yaw2: "))
+    # omt_y1 = float(raw_input("Frequenza temporale yaw1: "))
+    # omt_y2 = float(raw_input("Frequenza temporale yaw2: "))
     omx_y1 = float(raw_input("Frequenza spaziale yaw1: "))
     omx_y2 = float(raw_input("Frequenza spaziale yaw2: "))
     phas1 = float(raw_input("Fase1: "))
@@ -91,24 +93,24 @@ if bounds_choose == 'y':
     val2 = float(raw_input("Valore medio2: "))
     kos1 = float(raw_input("Costante1: "))
     kos2 = float(raw_input("Costante2: "))
-    bounds = {'a': (amp_p1, amp_p2), 'b': (omt_p1, omt_p2), 'c': (omx_p1, omx_p2), 'd': (amp_y1, amp_y2), 'e': (omt_y1, omt_y2), 'f': (omx_y1, omx_y2), 'g': (val1, val2), 'h': (phas1, phas2), 'i': (kos1, kos2)}
+    bounds =  {'a': (amp_p1, amp_p2), 'c': (omx_p1, omx_p2), 'd': (amp_y1, amp_y2), 'f': (omx_y1, omx_y2), 'g': (val1, val2), 'h': (phas1, phas2), 'i': (kos1, kos2)}
 else:
-    bounds = {'a': (1, 2), 'b': (1, 2), 'c': (1, 2), 'd': (1, 2), 'e': (1, 2), 'f': (1, 2), 'g': (1, 2), 'h': (1, 2), 'i': (1, 2)}
+    bounds = {'a': (1,2), 'c': (1, 2), 'd': (1,2), 'f': (1, 2), 'g': (1, 2), 'h': (1, 2), 'i': (1, 2)}
 
 print("\nPartire da un valore assegnato? [y/n]\n")
 assegnaz = raw_input()
 
 # FUNZIONE DI COSTO DA OTTIMIZZARE
 
-def cost_func(a, b, c, d, e, f, g, h, i):
+def cost_func(a, c, d, f, g, h, i):
 
     P = param()
 
     P.A_p = a
-    P.Ot_p = b
+    P.Ot_p = fre
     P.Ox_p = c
     P.A_y = d
-    P.Ot_y = e
+    P.Ot_y = fre
     P.Ox_y = f
     P.V_m = g
     P.Ph = h
@@ -118,13 +120,15 @@ def cost_func(a, b, c, d, e, f, g, h, i):
 
     en = 0
     dist_per = 0
+    dist_per_y = 0
+    dist_per_x = 0
 
     a_p = a * 3.14159 / 180
-    ot_p = b * 3.14159 / 180
+    ot_p = fre * 3.14159 / 180
     ox_p = c * 3.14159 / 180
 
     a_y = d * 3.14159 / 180
-    ot_y = e * 3.14159 / 180
+    ot_y = fre * 3.14159 / 180
     ox_y = f * 3.14159 / 180
 
     v_med = g * 3.14159 / 180
@@ -186,15 +190,18 @@ def cost_func(a, b, c, d, e, f, g, h, i):
         for i in range(num*2):
 
             if (i % 2) == 0:
-                exec("pace[{}] = a_y * ot_y * math.cos(t * ot_y + ox_y * {})".format(i,i/2))
+                exec("pace[{}] = abs(a_p * ot_y * math.cos(t * ot_y + ox_y * {}))".format(i,i/2))
             else:
-                exec("pace[{}] = a_p * ot_p * math.cos(t * ot_p + ox_p * {} + ph)".format(i,(i-1)/2))
+                exec("pace[{}] = abs(a_y * ot_p * math.cos(t * ot_p + ox_p * {} + ph))".format(i,(i-1)/2))
 
-        pot = numpy.multiply(pace, tor)
+        for var in range(num * 2):
+            torq = [0] * 2 * num
+            torq[var] = abs(tor[var])
+
+        pot = numpy.multiply(pace, torq)
         watt = JointState()
         watt.effort = pot
         en_consuption.publish(watt)
-        # inserisci la somma ricorsiva dell'energia
 
         # DEFINING THE MOVEMENTS
 
@@ -213,11 +220,13 @@ def cost_func(a, b, c, d, e, f, g, h, i):
         # Con questo if non considero i tempi di accelerazione
         if t < 1:
             pass
-        else:
-            dist_rel = math.sqrt((x-x_1)**2+(y-y_1)**2)
-            dist_per += dist_rel
+        else:    
+            # dist_rel = math.sqrt((x-x_1)**2+(y-y_1)**2)
+            # dist_per += dist_rel
             en += numpy.sum(pot)
-            vel = dist_per/(sec-100)*100
+            # vel = dist_per/(sec-100)*100
+            # dist_per_y += y - y_1
+            # dist_per_x += x - x_1
         pd = True
         while pd:
             try:
@@ -228,8 +237,11 @@ def cost_func(a, b, c, d, e, f, g, h, i):
 
     # counter += 1
     print(en)
-    eff = - dist_per/en
-    return eff*(abs(v_1-vel))**5
+    eff = 1/en
+    # if x < y/10: 
+    return eff*(abs(y)**5)
+    # else:
+    #     return eff*(abs(y / x)**5)
 
 
 # PROCESSO DI OTTIMIZZAZIONE
@@ -248,8 +260,8 @@ if assegnaz == 'y':
         params={"a": 32,"b": 32, "c": 32, "d": 22, "e": 32, "f": 32, "g": 0.1, "h": 11, "i": 0.24})
 
 optimizer.maximize(
-    init_points=1,
-    n_iter=0,
+    init_points=n_pti_rand,
+    n_iter=n_iteraz,
 )
 
 print(optimizer.max)
