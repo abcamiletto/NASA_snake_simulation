@@ -53,7 +53,7 @@ e = 150.0
 f = 0
 g = 0
 h = 0
-i = 0
+noneed = 0
 counter = 1
 
 #BUG AVOIDANCE
@@ -67,7 +67,7 @@ P.Ot_y = e
 P.Ox_y = f
 P.V_m = g
 P.Ph = h
-P.K = i
+P.K = noneed
 P.COUNTER = counter
 rospy.sleep(0.1)
 pub_param.publish(P)
@@ -95,7 +95,7 @@ for b in ot_p_span:
                                 P.Ox_y = f
                                 P.V_m = g
                                 P.Ph = h
-                                P.K = i
+                                P.K = noneed
                                 P.COUNTER = counter
                                 pub_param.publish(P)
 
@@ -109,7 +109,7 @@ for b in ot_p_span:
 
                                 v_med = g * 3.14159 / 180
                                 ph = h * 3.14159 / 180
-                                k = i * 3.14159 / 180
+                                k = noneed * 3.14159 / 180
 
                                 #STRAIGHT LINE
                                 for pm in range(num):
