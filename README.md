@@ -12,24 +12,24 @@ It should have been installed with the previous steps, if that's not the case fo
 ### Prepare files to store env variables
 Add this line to your .bashrc. You can find it in your home repository as an hidden file.
 
-`$ source /opt/ros/kinetic/setup.bash`
+`source /opt/ros/kinetic/setup.bash`
 
 ### Create a ROS workspace
 Let's assume you want to create your workspace on home.
 
 ```
-$ mkdir -p ~/snake/src
+mkdir -p ~/eels_ws/src
 ```
 
 Before continuing source your new setup.*sh file, or add the path to the bashrc as we did before.
 
-`$ source devel/setup.bash`
+`source devel/setup.bash`
 
 ### Downloading EELS Setup
 
 Download it from github
 ```
-cd ~/snake/src
+cd ~/eels_ws/src
 git clone https://github.com/abcamiletto/snake.git
 ```
 Now build all the ROS modules
