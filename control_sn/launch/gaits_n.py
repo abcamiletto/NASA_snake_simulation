@@ -34,14 +34,15 @@ en_consuption = rospy.Publisher('/adjusted_energy', JointState, queue_size=10)
 rospy.Subscriber('/snake/joint_states', JointState, Callback3)
 
 #GRID SEARCH PARAMETERS
-a_p_span = [20.0, 30.0, 40.0, 50.0, 60.0] #20,25,30,35,40,45
+a_p_span = [20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0, 55.0, 60.0] #20,25,30,35,40,45
 ot_p_span = [150.0]
 ox_p_span = [20.0,40.0,50.0]
-a_y_span = [0.0, 5.0, 10.0, 25.0]
+a_y_span = [0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 30.0]
 ot_y_span = [150.0]
-ox_y_span = [20.0, 40.0, 60.0] #108,162
-ph_span = [0.0, 5.0]
-v_med_span = [0.0, 10.0]
+ox_y_span = [20.0, 40.0, 60.0, 80.0, 120.0] #108,162
+ph_span = [0.0, 2.5, 5.0, 7.5]
+v_med_span = [0.0, 2.5, 5.0, 7.5, 10.0]
+TIMESPAN = 12
 
 tent = len(a_p_span)*len(ot_p_span)*len(ox_p_span)*len(a_y_span)*len(ot_y_span)*len(ox_y_span)*len(ph_span)*len(v_med_span)
 
@@ -150,7 +151,7 @@ for b in ot_p_span:
                                 r = rospy.Rate(100)
 
                                 # da usare quando pubblico
-                                while t < 15:
+                                while t < TIMESPAN :
 
                                     toc = rospy.Time.now() - tic
                                     t = (toc.secs * (10 ** 9) + toc.nsecs) / (10 ** 9 * 1.0000)
