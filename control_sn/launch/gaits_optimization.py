@@ -8,6 +8,7 @@ import math
 import rospkg
 import numpy
 from control_sn.msg import param
+from control_sn.msg import printresu
 from geometry_msgs.msg import Point
 from std_srvs.srv import Empty
 import time
@@ -16,9 +17,10 @@ from sensor_msgs.msg import JointState
 from bayes_opt import BayesianOptimization
 
 def Callback1(data):
-    global x, y
+    global x, y, z
     x = data.x
     y = data.y
+    z = data.z
 
 def Callback3(data):
     global tor
@@ -34,8 +36,7 @@ for i in range(num):
 
 
 pub_param = rospy.Publisher('/param', param, queue_size=10)
-
-en_consuption = rospy.Publisher('/adjusted_energy', JointState, queue_size=10)
+PRINT = rospy.Publisher('/print', printresu, queue_size=10)
 
 rospy.Subscriber('/snake/joint_states', JointState, Callback3)
 rospy.Subscriber('/my_odom', Point, Callback1)
@@ -64,6 +65,7 @@ P.Ox_y = f
 P.V_m = g
 P.Ph = h
 P.K = i
+P.COUNTER = counter
 rospy.sleep(0.1)
 pub_param.publish(P)
 rospy.sleep(0.3)
@@ -95,7 +97,7 @@ if bounds_choose == 'y':
     kos2 = float(raw_input("Costante2: "))
     bounds =  {'a': (amp_p1, amp_p2), 'c': (omx_p1, omx_p2), 'd': (amp_y1, amp_y2), 'f': (omx_y1, omx_y2), 'g': (val1, val2), 'h': (phas1, phas2), 'i': (kos1, kos2)}
 else:
-    bounds = {'a': (1,2), 'c': (1, 2), 'd': (1,2), 'f': (1, 2), 'g': (1, 2), 'h': (1, 2), 'i': (1, 2)}
+    bounds = {'a': (20,60), 'c': (30, 50), 'd': (0,20), 'f': (35, 85), 'g': (0, 20), 'h': (0, 15), 'i': (0,0)}
 
 print("\nPartire da un valore assegnato? [y/n]\n")
 assegnaz = raw_input()
@@ -103,6 +105,11 @@ assegnaz = raw_input()
 # FUNZIONE DI COSTO DA OTTIMIZZARE
 
 def cost_func(a, c, d, f, g, h, i):
+
+    global counter
+
+    en_p = 0
+    en_y = 0
 
     P = param()
 
@@ -115,13 +122,8 @@ def cost_func(a, c, d, f, g, h, i):
     P.V_m = g
     P.Ph = h
     P.K = i
-    # P.COUNTER = counter
+    P.COUNTER = counter
     pub_param.publish(P)
-
-    en = 0
-    dist_per = 0
-    dist_per_y = 0
-    dist_per_x = 0
 
     a_p = a * 3.14159 / 180
     ot_p = fre * 3.14159 / 180
@@ -136,9 +138,9 @@ def cost_func(a, c, d, f, g, h, i):
     k = i * 3.14159 / 180
 
     #STRAIGHT LINE
-    for i in range(num):
-        exec("motor{}p.publish(0.)".format(i))
-        exec("motor{}y.publish(0.)".format(i))
+    for pm in range(num):
+        exec("motor{}p.publish(0.)".format(pm))
+        exec("motor{}y.publish(0.)".format(pm))
 
 
     pd = True
@@ -173,11 +175,29 @@ def cost_func(a, c, d, f, g, h, i):
     # rateo di pubblicazione in Hz
     r = rospy.Rate(100)
 
-    # da usare quando pubblicokos = float(raw_input("Costante: "))
-    while t < 5:
+    #RESETTING NEEDED PARAMETERS
+    act_x = 0.0
+    act_y = 0.0
+    act_z = 0.0
+    dist_rel= 0.0
+    dist_per = 0.0
+    dist = 0
+    dist_z_per = 0.0
+    dist_z_rel = 0.0
+    z_med = 0.0
+    z_to_add = 0.0
+    en_p = 0.0
+    en_y = 0.0
+    en_tot = 0.0
 
+    # da usare quando pubblicokos = float(raw_input("Costante: "))
+    while t < 7:
+
+        #UPDATING THE VARIABLES
         x_1 = x
         y_1 = y
+        z_1 = z
+
         toc = rospy.Time.now() - tic
         t = (toc.secs * (10 ** 9) + toc.nsecs) / (10 ** 9 * 1.0000)
 
@@ -188,20 +208,25 @@ def cost_func(a, c, d, f, g, h, i):
         pace = [0]*(num * 2)
 
         for i in range(num*2):
-
             if (i % 2) == 0:
-                exec("pace[{}] = abs(a_p * ot_y * math.cos(t * ot_y + ox_y * {}))".format(i,i/2))
+                exec("pace[{}] = a_p * ot_y * math.cos(t * ot_y + ox_y * {})".format(i,i/2))
             else:
-                exec("pace[{}] = abs(a_y * ot_p * math.cos(t * ot_p + ox_p * {} + ph))".format(i,(i-1)/2))
+                exec("pace[{}] = a_y * ot_p * math.cos(t * ot_p + ox_p * {} + ph)".format(i,(i-1)/2))
 
-        for var in range(num * 2):
-            torq = [0] * 2 * num
-            torq[var] = abs(tor[var])
+        pot = numpy.multiply(pace, tor)
 
-        pot = numpy.multiply(pace, torq)
-        watt = JointState()
-        watt.effort = pot
-        en_consuption.publish(watt)
+        for indx in range(0,num):
+            if pot[int(2*indx)] > 0 and pot[int(2*indx)] < 0.9:
+                en_y += pot[int(2*indx)]
+            elif pot[int(2*indx)] < 0 and pot[int(2*indx)] > -0.9:
+                en_y += -pot[int(2*indx)]
+
+            if pot[int(2*indx+1)] > 0 and pot[int(2*indx+1)] < 0.9:
+                en_p += pot[int(2*indx+1)]
+            elif pot[int(2*indx+1)] < 0 and pot[int(2*indx+1)] < -0.9:
+                en_p += -pot[int(2*indx+1)]
+
+        effic = (-15*y_1)/(en_y/200 + en_p/200)
 
         # DEFINING THE MOVEMENTS
 
@@ -217,16 +242,46 @@ def cost_func(a, c, d, f, g, h, i):
 
         sec += 1
 
-        # Con questo if non considero i tempi di accelerazione
-        if t < 1:
+        #CALCULATING OUTPUT OF PROGRESSIVE VALUES
+        dist_rel = math.sqrt((x_1-act_x)**2+(y_1-act_y)**2)
+        dist_z_rel = math.fabs(z_1-act_z)
+        z_to_add = z_1 / 1
+
+            #DESYNC AVOIDANCE
+        if (dist_rel < 0.1) :
+            dist_per += dist_rel
+        else :
             pass
-        else:    
-            # dist_rel = math.sqrt((x-x_1)**2+(y-y_1)**2)
-            # dist_per += dist_rel
-            en += numpy.sum(pot)
-            # vel = dist_per/(sec-100)*100
-            # dist_per_y += y - y_1
-            # dist_per_x += x - x_1
+
+                #HEIGHT TOTAL VARIATION COMPUTING
+        if (dist_z_rel < 0.1) :
+            dist_z_per += dist_z_rel
+        else :
+            pass
+
+        z_med += z_to_add
+
+        #KEEPING LAST-1 VALUES IN MEMORY
+        act_x = x_1
+        act_y = y_1
+        act_z = z_1
+
+        pr = printresu()
+
+        pr.x_1 = x_1
+        pr.y_1 = y_1
+        pr.dist = math.sqrt(x_1**2+y_1**2)
+        pr.dist_per = dist_per
+        pr.dist_z_per = dist_z_per
+        pr.z_med = z_med
+        pr.en_tot = en_tot
+        pr.en_p = en_p
+        pr.en_y = en_y
+        pr.effic = effic
+
+        PRINT.publish(pr)
+
+
         pd = True
         while pd:
             try:
@@ -234,14 +289,12 @@ def cost_func(a, c, d, f, g, h, i):
                 pd = False
             except:
                 pass
+        pass
 
-    # counter += 1
-    print(en)
-    eff = 1/en
-    # if x < y/10: 
-    return eff*(abs(y)**5)
-    # else:
-    #     return eff*(abs(y / x)**5)
+    counter += 1
+
+    return effic
+
 
 
 # PROCESSO DI OTTIMIZZAZIONE
@@ -265,15 +318,3 @@ optimizer.maximize(
 )
 
 print(optimizer.max)
-
-dir = os.path.dirname(os.path.expanduser("~/Scrivania"))
-filenm = "parametri_ottimizzati"
-path = dir + "/Scrivania/" + filenm + ".txt"
-
-a = optimizer.max['params']
-intr = ["\nNel seguente file di testo puoi trovare i parametri ottimi:\nLEGENDA:\n'a' == amp_pitch\t'b' == omega_temp_pitch\t'c' == omega_sp_pitch\t'd' == amp_yaw\t'e' == omega_temp_yaw\t'f' == omega_sp_yaw\t'g' == mean value\t'h' == phase\t'i' == constant\n"]
-Row = str(a)
-file1 = open(path, "a")
-file1.writelines(intr)
-file1.write(Row)
-file1.close()

@@ -10,6 +10,9 @@
     <arg name="friction_m" default="10.0" />
     <arg name="max_ef" default="100.0" />
     
+    <include file="$(find csv_make)/launch/csv_b.launch">
+        <arg name="lenght" value="$(arg number_of_elements)" />
+    </include>
     <include file="$(find snake_description)/launch/spawn_full_snake_n.launch">
         <arg name="number_of_elements" value="$(arg number_of_elements)" />
         <arg name="diameter_m" value="$(arg diameter_m)" />

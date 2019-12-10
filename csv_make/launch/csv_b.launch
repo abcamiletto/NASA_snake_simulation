@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>   
+
+    <arg name="lenght" default = "1"/>
+	<node name="writer_csv" pkg="csv_make" type="baes_print.py" respawn="false" output="screen">
+	     <param name="leng" value="$(arg lenght)" />
+	</node>
+
+</launch>
