@@ -4,9 +4,11 @@ float64 dist
 float64 dist_per
 float64 dist_z_per
 float64 z_med
-float64 en_tot
-float64 en_p
-float64 en_y
 float64 effic
 float64[] realpot
-float64[] mypot
+float64[] attendedpot
+float64 real_p_en
+float64 real_y_en
+float64 attended_p_en
+float64 attended_y_en
+
