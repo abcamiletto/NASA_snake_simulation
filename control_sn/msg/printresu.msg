@@ -8,3 +8,5 @@ float64 en_tot
 float64 en_p
 float64 en_y
 float64 effic
+float64[] realpot
+float64[] mypot

@@ -2,8 +2,8 @@ import yaml
 import sys
 import os
 
-P_VALUE = 10.0
-I_VALUE = 10.0
+P_VALUE = 2000.0
+I_VALUE = 0.0
 D_VALUE = 0.0
 
 def generate_numberelementsfile(num_elements, num_elements_filename):

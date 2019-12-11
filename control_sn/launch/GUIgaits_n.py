@@ -9,6 +9,7 @@ from numpy import zeros, array, linspace
 import math
 import rospkg
 from gazebo_msgs.srv import DeleteModel, DeleteModelRequest
+from controller_manager_msgs.srv import SwitchController, SwitchControllerRequest
 import roslaunch
 import subprocess
 from control_sn.msg import param
@@ -196,6 +197,15 @@ def SideWinding(event):
 def Respawn():
     reset = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
     resetta_tutto = reset()
+
+    #JOINT_STATE_PUBLISHER RESPAWN (TO AVOID GAZEBO BUG)
+    respawn = SwitchControllerRequest()
+    respawn.start_controllers = ["joint_state_controller"]
+    respawn.stop_controllers = ["joint_state_controller"]
+    respawn.strictness = 1
+
+    aaa = rospy.ServiceProxy('/snake/controller_manager/switch_controller', SwitchController)
+    resp1 = aaa(respawn)
 
 
 

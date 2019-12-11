@@ -4,7 +4,7 @@ import csv
 import rospy
 from geometry_msgs.msg import Point
 from sensor_msgs.msg import JointState
-from control_sn.msg import param
+from control_sn.msg import param, energy
 import math
 import os
 
@@ -31,13 +31,14 @@ V_m = 0.0
 Ph = 0.0
 k = 0.0
 count = 0
-power = [0] * (leng*2)
 dist_per = 0.0
 dist_z_per = 0.0
-en_y = 0.0
-en_p = 0.0
 z_to_add = 0.0
 z_med = 0.0
+attended_en_p = 0
+attended_en_y = 0
+real_en_p = 0
+real_en_y = 0
 
 
 #CALLBACKS FUNCTIONS
@@ -61,18 +62,21 @@ def Callback2(data):
     count = data.COUNTER
 
 def Callback3(data):
-    global power
-    power = data.effort
+    global attended_en_p, attended_en_y, real_en_p, real_en_y
+    attended_en_p = data.attended_p_en
+    attended_en_y = data.attended_y_en
+    real_en_p = data.real_p_en
+    real_en_y = data.real_y_en
 
 #SUBSCRIBERS
-rospy.Subscriber('/snake/joint_states', JointState, Callback3)
+rospy.Subscriber('/energy', energy, Callback3)
 rospy.Subscriber('/my_odom', Point, Callback1)
 rospy.Subscriber('/param', param, Callback2)
 
 #WRITING THE FIRST LINE
 with open(path, "wb") as writeFile:
     wr=csv.writer(writeFile, dialect='excel')
-    wr.writerow(['Attempt', 'x', 'y', 'Total Distance', 'Traveled space','Height Variation Stability', 'Mean Height', 'Amplitude Pitch', 'Time frequency Pitch', 'Spatial frequency Pitch', 'Amplitude Yaw', 'Time frequency Yaw', 'Spatial frequency Yaw', 'Mean value', 'Phase', 'Constant', 'Total Energy', 'Pitch Energy', 'Yaw Energy', 'Efficency'])
+    wr.writerow(['Attempt', 'x', 'y', 'Total Distance', 'Traveled space','Height Variation Stability', 'Mean Height', 'Amplitude Pitch', 'Time frequency Pitch', 'Spatial frequency Pitch', 'Amplitude Yaw', 'Time frequency Yaw', 'Spatial frequency Yaw', 'Mean value', 'Phase', 'Constant', 'Real Total Energy', 'Real Pitch Energy', 'Real Yaw Energy','Attended Total Energy', 'Attended Pitch Energy', 'Attended Yaw Energy'])
     writeFile.close()
 
 #PARAMETERS I NEED
@@ -111,6 +115,10 @@ while not rospy.is_shutdown():
             x_1 = x
             y_1 = y
             z_1 = z
+            attended_en_p_1 = attended_en_p
+            attended_en_y_1 = attended_en_y
+            real_en_p_1 = real_en_p
+            real_en_y_1 = real_en_y
 
             #CALCULATING OUTPUT OF PROGRESSIVE VALUES
             dist_rel = math.sqrt((x_1-act_x)**2+(y_1-act_y)**2)
@@ -122,18 +130,6 @@ while not rospy.is_shutdown():
                 dist_per += dist_rel
             else :
                 pass
-
-                #ENERGY COMPUTING
-            for indx in range(0,leng):
-                if power[int(2*indx)] > 0 and power[int(2*indx)] < 0.9:
-                    en_y += power[int(2*indx)]
-                elif power[int(2*indx)] < 0 and power[int(2*indx)] > -0.9:
-                    en_y += -power[int(2*indx)]
-
-                if power[int(2*indx+1)] > 0 and power[int(2*indx+1)] < 0.9:
-                    en_p += power[int(2*indx+1)]
-                elif power[int(2*indx+1)] < 0 and power[int(2*indx+1)] < -0.9:
-                    en_p += -power[int(2*indx+1)]
 
                     #HEIGHT TOTAL VARIATION COMPUTING
             if (dist_z_rel < 0.1) :
@@ -160,7 +156,7 @@ while not rospy.is_shutdown():
         elif (count == act_count +1):
             #I WRITE THE RESULTS
             #LINE TO BE WRITTEN
-            line_to_override = ['Tentativo ' + str(act_count), round(x_1,3), round(y_1,3), round(math.sqrt(act_x**2+act_y**2),3), round(dist_per,3),round(dist_z_per,3), round(z_med / 3 ,3), a_p_1, ot_p_1, ox_p_1, a_y_1, ot_y_1, ox_y_1, V_m_1, Ph_1, k_1,round(en_p/200+en_y/200,3), round(en_p/200,3), round(en_y/200,3), round(-15*y_1/(en_p/200+en_y/200), 3)]
+            line_to_override = ['Tentativo ' + str(act_count), round(x_1,3), round(y_1,3), round(math.sqrt(act_x**2+act_y**2),3), round(dist_per,3),round(dist_z_per,3), round(z_med / 3 ,3), a_p_1, ot_p_1, ox_p_1, a_y_1, ot_y_1, ox_y_1, V_m_1, Ph_1, k_1,round(real_en_y/10000+real_en_p/10000,3), round(real_en_p/10000,3), round(real_en_y/10000,3),round(attended_en_y/10000+attended_en_p/10000,3), round(attended_en_p/10000,3), round(attended_en_y/10000,3)]
 
             #APPENDING A NEW LINE
             with open(path, "a") as fp:

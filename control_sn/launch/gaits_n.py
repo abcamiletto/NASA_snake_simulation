@@ -6,7 +6,7 @@ from std_msgs.msg import Float64
 from numpy import multiply
 import math
 import rospkg
-from control_sn.msg import param
+from control_sn.msg import param, energy
 from std_srvs.srv import Empty
 import time
 from controller_manager_msgs.srv import SwitchController, SwitchControllerRequest
@@ -14,13 +14,14 @@ from sensor_msgs.msg import JointState
 
 
 def Callback3(data):
-    global tor
+    global tor, veloc
     tor = data.effort
+    veloc = data.velocity
 
 rospy.init_node('mycontrol')
 num = rospy.get_param('~numb')
 time.sleep(6.0)
-tor = [0] * (num * 2)
+
 #INIT PUBLISHER
 for i in range(num):
     exec("motor{}p = rospy.Publisher('/snake/snake_body_{}_joint_position_controller/command',Float64, queue_size = 121)".format(i,i))
@@ -29,18 +30,18 @@ for i in range(num):
 
 pub_param = rospy.Publisher('/param', param, queue_size=10)
 
-en_consuption = rospy.Publisher('/adjusted_energy', JointState, queue_size=10)
+en_consuption = rospy.Publisher('/energy', energy, queue_size=10)
 
 rospy.Subscriber('/snake/joint_states', JointState, Callback3)
 
 #GRID SEARCH PARAMETERS
-a_p_span = [20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0, 55.0, 60.0]
+a_p_span = [15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0, 55.0, 60.0]
 ot_p_span = [150.0]
 ox_p_span = [40.0]
 a_y_span = [0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 30.0]
 ot_y_span = [150.0]
 ox_y_span = [40.0, 80.0, 120.0]
-ph_span = [0.0, 2.5, 5.0, 7.5, 10.0]
+ph_span = [0.0, 2.5, 7.5, 10.0]
 v_med_span = [0.0, 2.5, 5.0, 7.5, 10.0, 15.0, 22.5, 30.0]
 TIMESPAN = 12
 
@@ -150,6 +151,11 @@ for b in ot_p_span:
                                 # rateo di pubblicazione in Hz
                                 r = rospy.Rate(100)
 
+                                attended_en_p = 0
+                                attended_en_y = 0
+                                real_en_p = 0
+                                real_en_y = 0
+
                                 # da usare quando pubblico
                                 while t < TIMESPAN :
 
@@ -169,10 +175,41 @@ for b in ot_p_span:
                                         else:
                                             exec("pace[{}] = a_p * ot_p * math.cos(t * ot_p + ox_p * {} + ph)".format(i,(i-1)/2))
 
-                                    pot = multiply(pace, tor)
-                                    watt = JointState()
-                                    watt.effort = pot
-                                    en_consuption.publish(watt)
+
+                                    attendedpot = multiply(pace, tor)
+                                    realpot = multiply(veloc, tor)
+                                    ENERGY = energy()
+                                    ENERGY.realpot = realpot
+                                    ENERGY.attendedpot = attendedpot
+
+                                    for indx in range(0,num):
+                                        if attendedpot[int(2*indx)] > 0 :
+                                            attended_en_y += attendedpot[int(2*indx)]
+                                        elif attendedpot[int(2*indx)] < 0 :
+                                            attended_en_y += -attendedpot[int(2*indx)]
+
+                                        if attendedpot[int(2*indx+1)] > 0:
+                                            attended_en_p += attendedpot[int(2*indx+1)]
+                                        elif attendedpot[int(2*indx+1)] < 0 :
+                                            attended_en_p += -attendedpot[int(2*indx+1)]
+
+                                    for indx in range(0,num):
+                                        if realpot[int(2*indx)] > 0 :
+                                            real_en_y += realpot[int(2*indx)]
+                                        elif realpot[int(2*indx)] < 0 :
+                                            real_en_y += -realpot[int(2*indx)]
+
+                                        if realpot[int(2*indx+1)] > 0:
+                                            real_en_p += realpot[int(2*indx+1)]
+                                        elif realpot[int(2*indx+1)] < 0 :
+                                            real_en_p += -realpot[int(2*indx+1)]
+
+                                    ENERGY.real_p_en = real_en_p
+                                    ENERGY.real_y_en = real_en_y
+                                    ENERGY.attended_p_en = attended_en_p
+                                    ENERGY.attended_y_en = attended_en_y
+
+                                    en_consuption.publish(ENERGY)
 
                                     # DEFINING THE MOVEMENTS
 

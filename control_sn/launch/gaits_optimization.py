@@ -108,6 +108,8 @@ def cost_func(a, c, d, f, g, h, i):
 
     global counter
 
+    rospy.sleep(0.2)
+
     en_p = 0
     en_y = 0
 
@@ -186,12 +188,12 @@ def cost_func(a, c, d, f, g, h, i):
     dist_z_rel = 0.0
     z_med = 0.0
     z_to_add = 0.0
-    en_p = 0.0
-    en_y = 0.0
+    en_p = 0.0001
+    en_y = 0.0001
     en_tot = 0.0
 
     # da usare quando pubblicokos = float(raw_input("Costante: "))
-    while t < 7:
+    while t < 9:
 
         #UPDATING THE VARIABLES
         x_1 = x
@@ -213,7 +215,6 @@ def cost_func(a, c, d, f, g, h, i):
             else:
                 exec("pace[{}] = a_y * ot_p * math.cos(t * ot_p + ox_p * {} + ph)".format(i,(i-1)/2))
 
-        pot = numpy.multiply(pace, tor)
 
         for indx in range(0,num):
             if pot[int(2*indx)] > 0 and pot[int(2*indx)] < 0.9:
@@ -225,6 +226,7 @@ def cost_func(a, c, d, f, g, h, i):
                 en_p += pot[int(2*indx+1)]
             elif pot[int(2*indx+1)] < 0 and pot[int(2*indx+1)] < -0.9:
                 en_p += -pot[int(2*indx+1)]
+
 
         effic = (-15*y_1)/(en_y/200 + en_p/200)
 
@@ -292,6 +294,7 @@ def cost_func(a, c, d, f, g, h, i):
         pass
 
     counter += 1
+
 
     return effic
 
