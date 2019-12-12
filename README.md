@@ -56,11 +56,15 @@ Let's take a look at the inputs.
 
 ![Alt text](pitch.png?raw=true "Title")
 
+Where n is the number of the joint they're in.
 
 #### Grid Search
-aaaaaaaa
+In this type of search we're doing a brute force research on pre-defined bounds. It prints a csv files in a Desktop folder "results" in which you can see all the results it achieved.
+
 #### Baesian Optimization
+
 aaaaaaaa
+
 ### Parametrisation
 The main variables that can be changed in *src/START/parameters/sim_param.txt* are:
 
@@ -75,4 +79,5 @@ The main variables that can be changed in *src/START/parameters/sim_param.txt* a
 Other parameters you may want to change are:
 
 - **PIDs** : the PIDs of the Yaw and Pitch degree of freedom. You can find them in *src/START/script/config_files_yaml_generator.py*. The default values are P = 3000 for the yaw and P = 11000 for the pitch, both with I and D equal to zero.
-- **Grid Search Span**: the mash you want the grid search to look into. You can find it in *src/control_sn/launch/gaits_n.py*
+- **Grid Search Span** : the mash you want the grid search to look into. You can find it in *src/control_sn/launch/gaits_n.py*
+- **Baesian Optimization Default Values** :  
