@@ -52,8 +52,8 @@ The simulation is based on an existing snake Gazebo implementation, you can find
 The two main research algorithm are focused on finding the best gaits with sinusoidal motion of the different motors. In particular, all motors follow two different input whether they control the pitch or yaw degree of freedom.
 Let's take a look at the inputs.
 
-
-
+![Alt text](yaw1.png?raw=true "Title")
+![Alt text](pitch.png?raw=true "Title")
 
 
 #### Grid Search
