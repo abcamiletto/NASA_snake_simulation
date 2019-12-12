@@ -260,7 +260,7 @@ def cost_func(a, c, d, f, g, h, i):
 
         z_med += z_to_add
 
-        effic = (abs(y_1))/(attended_en_y + attended_en_p)*100000000
+        effic = (abs(y_1))/(dy_1*(attended_en_y + attended_en_p))*100000000
 
         #KEEPING LAST-1 VALUES IN MEMORY
         act_x = x_1
