@@ -17,9 +17,10 @@
         <arg name="mass_m" default="0.1" />
         <arg name="friction_m" default="10.0" />
         <arg name="max_ef" default="100.0" />
+        <arg name="max_ya" default="100.0" />
         
 
-        <param name="robot_description" command="$(find xacro)/xacro '$(arg xacro_robot_file)' prefix:=$(arg number_of_elements) diam:=$(arg diameter_m) leng:=$(arg lenght_m) mass:=$(arg mass_m) friction:=$(arg friction_m) max_effort:=$(arg max_ef)"/>
+        <param name="robot_description" command="$(find xacro)/xacro '$(arg xacro_robot_file)' prefix:=$(arg number_of_elements) diam:=$(arg diameter_m) leng:=$(arg lenght_m) mass:=$(arg mass_m) friction:=$(arg friction_m) max_effort:=$(arg max_ef) max_yaw:=$(arg max_ya)" />
         
         <node name="urdf_spawner_snake" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
         args="-urdf -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y) -model $(arg robot_name) -param /robot_description"/>

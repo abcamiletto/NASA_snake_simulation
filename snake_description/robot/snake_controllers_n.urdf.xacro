@@ -17,6 +17,7 @@
     <xacro:property name="Mass2" value="${Mass_tot*0.05/Lenght_tot}" />
     <xacro:property name="mu" value="$(arg friction)" />
     <xacro:property name="maxeffort" value="$(arg max_effort)" />
+    <xacro:property name="max_ef_yaw" value="$(arg max_yaw)" />
     
     <xacro:macro name="body_link" params="base_name parent_name colour">
         
@@ -84,7 +85,7 @@
             <parent link="${parent_name}"/>
         	<child link="${base_name}_aux"/>
             <origin xyz="0 0 ${Lenght}" rpy="0 0 0"/>
-            <limit lower="-1.5708" upper="1.5708" effort="${maxeffort}" velocity="0.5"/>
+            <limit lower="-1.5708" upper="1.5708" effort="${max_ef_yaw}" velocity="0.5"/>
             <axis xyz="0 0 1"/>
     	</joint>
     	
@@ -171,7 +172,7 @@
     	    <parent link="startpt"/>
             <child link="snake_body_${NumberOfElements}"/>
             <origin xyz="0 0 0.002" rpy="0 0 0"/>
-            <limit lower="-100" upper="100" effort="${maxeffort}" velocity="0.5"/>
+            <limit lower="-100" upper="100" effort="0.1" velocity="0.5"/>
             <axis xyz="0 0 1"/>
     </joint>
 

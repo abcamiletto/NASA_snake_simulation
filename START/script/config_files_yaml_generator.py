@@ -2,9 +2,13 @@ import yaml
 import sys
 import os
 
-P_VALUE = 2000.0
-I_VALUE = 0.0
-D_VALUE = 0.0
+P_VALUE_pitch = 11000.0
+I_VALUE_pitch = 0.0
+D_VALUE_pitch = 0.0
+
+P_VALUE_yaw = 3000.0
+I_VALUE_yaw = 0.0
+D_VALUE_yaw = 0.0
 
 def generate_numberelementsfile(num_elements, num_elements_filename):
 
@@ -75,14 +79,14 @@ def generate_controllerconfig_yaml_dict(num_elements):
 
         aux_controller_data_dict = {'type':'effort_controllers/JointPositionController',
                                 'joint':"snake_body_"+float_string_value+"_aux_joint",
-                                'pid':dict(p = P_VALUE, i = I_VALUE, d = D_VALUE)
+                                'pid':dict(p = P_VALUE_yaw, i = I_VALUE_yaw, d = D_VALUE_yaw)
                                 }
 
         controller_name = 'snake_body_'+int_string_value+'_joint_position_controller'
 
         controller_data_dict = {'type':'effort_controllers/JointPositionController',
                                 'joint':"snake_body_"+float_string_value+"_joint",
-                                'pid':dict(p = P_VALUE, i = I_VALUE, d = D_VALUE)
+                                'pid':dict(p = P_VALUE_pitch, i = I_VALUE_pitch, d = D_VALUE_pitch)
                                 }
 
         content_dict[aux_controller_name] = aux_controller_data_dict

@@ -8,7 +8,7 @@ import math
 import rospkg
 import numpy
 from control_sn.msg import param, printresu
-from geometry_msgs.msg import Point
+from my_odom_publisher.msg import odom
 from std_srvs.srv import Empty
 import time
 from controller_manager_msgs.srv import SwitchController, SwitchControllerRequest
@@ -16,10 +16,11 @@ from sensor_msgs.msg import JointState
 from bayes_opt import BayesianOptimization
 
 def Callback1(data):
-    global x, y, z
+    global x, y, z, dy
     x = data.x
     y = data.y
     z = data.z
+    dy = data.diffy
 
 def Callback3(data):
     global tor, veloc
@@ -39,7 +40,7 @@ pub_param = rospy.Publisher('/param', param, queue_size=10)
 PRINT = rospy.Publisher('/print', printresu, queue_size=10)
 
 rospy.Subscriber('/snake/joint_states', JointState, Callback3)
-rospy.Subscriber('/my_odom', Point, Callback1)
+rospy.Subscriber('/my_odom', odom, Callback1)
 
 
 a = 0
@@ -113,8 +114,8 @@ def cost_func(a, c, d, f, g, h, i):
 
     attended_en_p = 0
     attended_en_y = 0
-    real_en_p = 0
-    real_en_y = 0
+    real_en_p = 0.001
+    real_en_y = 0.001
 
     P = param()
 
@@ -190,7 +191,8 @@ def cost_func(a, c, d, f, g, h, i):
     dist_z_rel = 0.0
     z_med = 0.0
     z_to_add = 0.0
-    
+    act_dy = 0.0
+
     # da usare quando pubblicokos = float(raw_input("Costante: "))
     while t < tsec:
 
@@ -198,6 +200,7 @@ def cost_func(a, c, d, f, g, h, i):
         x_1 = x
         y_1 = y
         z_1 = z
+        dy_1 = dy
 
         toc = rospy.Time.now() - tic
         t = (toc.secs * (10 ** 9) + toc.nsecs) / (10 ** 9 * 1.0000)
@@ -218,27 +221,11 @@ def cost_func(a, c, d, f, g, h, i):
         attendedpot = numpy.multiply(pace, tor)
         realpot = numpy.multiply(veloc, tor)
 
-        for indx in range(0,num):
-            if attendedpot[int(2*indx)] > 0 :
-                attended_en_y += attendedpot[int(2*indx)]
-            elif attendedpot[int(2*indx)] < 0 :
-                attended_en_y += -attendedpot[int(2*indx)]
-
-            if attendedpot[int(2*indx+1)] > 0:
-                attended_en_p += attendedpot[int(2*indx+1)]
-            elif attendedpot[int(2*indx+1)] < 0 :
-                attended_en_p += -attendedpot[int(2*indx+1)]
-
-        for indx in range(0,num):
-            if realpot[int(2*indx)] > 0 :
-                real_en_y += realpot[int(2*indx)]
-            elif realpot[int(2*indx)] < 0 :
-                real_en_y += -realpot[int(2*indx)]
-
-            if realpot[int(2*indx+1)] > 0:
-                real_en_p += realpot[int(2*indx+1)]
-            elif realpot[int(2*indx+1)] < 0 :
-                real_en_p += -realpot[int(2*indx+1)]
+        for indx in range(num):
+            attended_en_y += abs(attendedpot[int(2*indx)])
+            attended_en_p += abs(attendedpot[int(2*indx+1)])
+            real_en_y += abs(realpot[int(2*indx)])
+            real_en_p += abs(realpot[int(2*indx+1)])
 
         # DEFINING THE MOVEMENTS
 
@@ -272,8 +259,8 @@ def cost_func(a, c, d, f, g, h, i):
             pass
 
         z_med += z_to_add
-        effic = (-abs(y_1))/(real_en_y + real_en_p)
 
+        effic = (abs(y_1))/(attended_en_y + attended_en_p)*100000000
 
         #KEEPING LAST-1 VALUES IN MEMORY
         act_x = x_1
@@ -283,6 +270,7 @@ def cost_func(a, c, d, f, g, h, i):
         pr = printresu()
         pr.x_1 = x_1
         pr.y_1 = y_1
+        pr.diffy = dy_1
         pr.dist = math.sqrt(x_1**2+y_1**2)
         pr.dist_per = dist_per
         pr.dist_z_per = dist_z_per

@@ -1,5 +1,6 @@
 float64 x_1
 float64 y_1
+float64 diffy
 float64 dist
 float64 dist_per
 float64 dist_z_per
@@ -11,4 +12,3 @@ float64 real_p_en
 float64 real_y_en
 float64 attended_p_en
 float64 attended_y_en
-

@@ -1,13 +1,13 @@
 #! /usr/bin/env python
 
 import rospy
-from geometry_msgs.msg import Point
-from std_msgs.msg import Header
+from my_odom_publisher.msg import odom
+from std_msgs.msg import Header, Float64
 from gazebo_msgs.srv import GetLinkState, GetLinkStateRequest
 
 rospy.init_node('odom_pub')
 
-odom_pub=rospy.Publisher ('/my_odom', Point, queue_size = 20)
+odom_pub=rospy.Publisher ('/my_odom', odom, queue_size = 20)
 
 num = rospy.get_param('~number')
 lengh = rospy.get_param('~lengh')
@@ -16,7 +16,7 @@ radius = rospy.get_param('~radius')
 rospy.wait_for_service ('/gazebo/get_link_state')
 get_link_srv = rospy.ServiceProxy('/gazebo/get_link_state', GetLinkState)
 
-pos=Point()
+pos=odom()
 
 links = {}
 for index in range(num):
@@ -42,6 +42,9 @@ while not rospy.is_shutdown():
         pos.y += y[index]/(num+1)
         pos.z += z[index]/(num+1)
 
+    y_1 = y[1]
+    y_last = y[num]
+    pos.diffy = abs(y_last - y_1)
 
     pos.x = pos.x - lengh * num / 2 - 0.002
     pos.z = pos.z - radius

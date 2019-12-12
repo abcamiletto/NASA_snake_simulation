@@ -2,7 +2,7 @@
 
 import csv
 import rospy
-from geometry_msgs.msg import Point
+from my_odom_publisher.msg import odom
 from sensor_msgs.msg import JointState
 from control_sn.msg import param, printresu
 import math
@@ -15,12 +15,13 @@ leng = rospy.get_param('~leng')
 #DEFINING A DIRECTORY and file name
 dir = os.path.expanduser("~")
 filenm = "baes_search_results"
-path = dir + "/Desktop/results/" + filenm + ".csv"
+path = dir + "/Scrivania/results/" + filenm + ".csv"
 
 #GLOBAL PARAMATERS
 x = 0.0
 y = 0.0
 z = 0.0
+dy = 0.0
 a_p = 0.0
 ot_p = 0.0
 ox_p = 0.0
@@ -47,9 +48,10 @@ z_med = 0.0
 
 #CALLBACKS FUNCTIONS
 def Callback1(data):
-    global x, y, dist, dist_per, dist_z_per, z_med, effic, real_en_y, real_en_p, attended_en_p, attended_en_y
+    global x, y, dy, dist, dist_per, dist_z_per, z_med, effic, real_en_y, real_en_p, attended_en_p, attended_en_y
     x = data.x_1
     y = data.y_1
+    dy = data.diffy
     dist = data.dist
     dist_per = data.dist_per
     dist_z_per = data.dist_z_per
@@ -82,7 +84,7 @@ rospy.Subscriber('/print', printresu, Callback1)
 #WRITING THE FIRST LINE
 with open(path, "wb") as writeFile:
     wr=csv.writer(writeFile, dialect='excel')
-    wr.writerow(['Attempt', 'x', 'y', 'Total Distance', 'Traveled space','Height Variation Stability', 'Mean Height', 'Amplitude Pitch', 'Time frequency Pitch', 'Spatial frequency Pitch', 'Amplitude Yaw', 'Time frequency Yaw', 'Spatial frequency Yaw', 'Mean value', 'Phase', 'Constant', 'Real Energy yaw', 'Real Energy pitch', 'Attended Energy yaw', 'Attended Energy pitch', 'Total Real Energy', 'Total Attended Energy', 'Efficency'])
+    wr.writerow(['Attempt', 'x', 'y', 'Total Distance', 'Delta y', 'Traveled space','Height Variation Stability', 'Mean Height', 'Amplitude Pitch', 'Time frequency Pitch', 'Spatial frequency Pitch', 'Amplitude Yaw', 'Time frequency Yaw', 'Spatial frequency Yaw', 'Mean value', 'Phase', 'Constant', 'Real Energy yaw', 'Real Energy pitch', 'Attended Energy yaw', 'Attended Energy pitch', 'Total Real Energy', 'Total Attended Energy', 'Efficency'])
     writeFile.close()
 
 #PARAMETERS I NEED
@@ -115,6 +117,7 @@ while not rospy.is_shutdown():
             y_1 = y
             dist_1 = dist
             dist_per_1 = dist_per
+            dy_1 = dy
             dist_z_per_1 = dist_z_per
             z_med_1 = z_med
             a_p_1 = a_p
@@ -126,10 +129,10 @@ while not rospy.is_shutdown():
             V_m_1 = V_m
             Ph_1 = Ph
             k_1 = k
-            real_en_p_1 = real_en_p
-            real_en_y_1 = real_en_y
-            attended_en_p_1 = attended_en_p
-            attended_en_y_1 = attended_en_y
+            real_en_p_1 = real_en_p/100000
+            real_en_y_1 = real_en_y/100000
+            attended_en_p_1 = attended_en_p/100000
+            attended_en_y_1 = attended_en_y/100000
             effic_1 = effic
 
             pd = True
@@ -145,7 +148,7 @@ while not rospy.is_shutdown():
             #I WRITE THE RESULTS
             #LINE TO BE WRITTEN
 
-            line_to_override = ['Tentativo ' + str(act_count), round(x_1, 3), round(y_1, 3), round(dist_1,3), round(dist_per_1,3),round(dist_z_per_1,3), round(z_med_1 ,3), round(a_p_1,3), round(ot_p_1,3), round(ox_p_1), round(a_y_1), round(ot_y_1), round(ox_y_1), round(V_m_1), round(Ph_1), round(k_1) ,round(real_en_y_1, 3), round(real_en_p_1, 3), round(attended_en_y_1,3), round(attended_en_p_1,3), round(real_en_p_1+real_en_y_1,3), round(attended_en_p_1+attended_en_y_1,3), effic_1]
+            line_to_override = ['Tentativo ' + str(act_count), round(x_1, 3), round(y_1, 3), round(dist_1,7), round(dy_1, 3), round(dist_per_1,3), round(dist_z_per_1,3), round(z_med_1 ,3), round(a_p_1,3), round(ot_p_1,3), round(ox_p_1,3), round(a_y_1,3), round(ot_y_1,3), round(ox_y_1,3), round(V_m_1,3), round(Ph_1,3), round(k_1,3) ,round(real_en_y_1, 3), round(real_en_p_1, 3), round(attended_en_y_1,3), round(attended_en_p_1,3), round(real_en_p_1+real_en_y_1,3), round(attended_en_p_1+attended_en_y_1,3), round(effic_1,3)]
 
             #APPENDING A NEW LINE
             with open(path, "a") as fp:

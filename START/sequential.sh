@@ -1,10 +1,7 @@
 #!/bin/sh
-
-sleep 3h
+sleep 6h
 killall roscore
-sleep 10s
-killall -9 gzserver gzclient
-sleep 20s
+sleep 5m
 
 cd parameters
 . ./sim_param.txt
@@ -13,7 +10,8 @@ echo $radius
 echo $lenght
 echo $mass
 echo $friction
-echo $max_effort
+echo $max_effort_pitch
+echo $max_effort_yaw
 
 echo Done.
 
@@ -25,4 +23,4 @@ number_of_elements=$(cat numelements_temp.yaml)
 echo $number_of_elements
 controllerargs=$(cat controllerargs_temp.yaml)
 echo $controllerargs
-roslaunch snake_description easy_spawn.launch number_of_elements:="$number_of_elements" controller_args:="$controllerargs" diameter_m:="$radius" lenght_m:="$lenght" mass_m:="$mass" friction_m:="$friction" max_ef:="$max_effort"
+roslaunch snake_description easy_spawn.launch number_of_elements:="$number_of_elements" controller_args:="$controllerargs" diameter_m:="$radius" lenght_m:="$lenght" mass_m:="$mass" friction_m:="$friction" max_ef:="$max_effort_pitch" max_ya:="$max_effort_yaw"

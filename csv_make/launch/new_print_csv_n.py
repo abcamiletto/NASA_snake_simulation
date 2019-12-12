@@ -2,7 +2,7 @@
 
 import csv
 import rospy
-from geometry_msgs.msg import Point
+from my_odom_publisher.msg import odom
 from sensor_msgs.msg import JointState
 from control_sn.msg import param, energy
 import math
@@ -43,10 +43,11 @@ real_en_y = 0
 
 #CALLBACKS FUNCTIONS
 def Callback1(data):
-    global x, y, z
+    global x, y, z, dy
     x = data.x
     y = data.y
     z = data.z
+    dy = data.diffy
 
 def Callback2(data):
     global a_p, ot_p, ox_p, a_y, ot_y, ox_y, V_m, Ph, k, count
@@ -70,13 +71,13 @@ def Callback3(data):
 
 #SUBSCRIBERS
 rospy.Subscriber('/energy', energy, Callback3)
-rospy.Subscriber('/my_odom', Point, Callback1)
+rospy.Subscriber('/my_odom', odom, Callback1)
 rospy.Subscriber('/param', param, Callback2)
 
 #WRITING THE FIRST LINE
 with open(path, "wb") as writeFile:
     wr=csv.writer(writeFile, dialect='excel')
-    wr.writerow(['Attempt', 'x', 'y', 'Total Distance', 'Traveled space','Height Variation Stability', 'Mean Height', 'Amplitude Pitch', 'Time frequency Pitch', 'Spatial frequency Pitch', 'Amplitude Yaw', 'Time frequency Yaw', 'Spatial frequency Yaw', 'Mean value', 'Phase', 'Constant', 'Real Total Energy', 'Real Pitch Energy', 'Real Yaw Energy','Attended Total Energy', 'Attended Pitch Energy', 'Attended Yaw Energy'])
+    wr.writerow(['Attempt', 'x', 'y', 'Total Distance', 'Delta y', 'Traveled space', 'Height Variation Stability', 'Mean Height', 'Amplitude Pitch', 'Time frequency Pitch', 'Spatial frequency Pitch', 'Amplitude Yaw', 'Time frequency Yaw', 'Spatial frequency Yaw', 'Mean value', 'Phase', 'Constant', 'Real Total Energy', 'Real Pitch Energy', 'Real Yaw Energy','Attended Total Energy', 'Attended Pitch Energy', 'Attended Yaw Energy'])
     writeFile.close()
 
 #PARAMETERS I NEED
@@ -115,6 +116,7 @@ while not rospy.is_shutdown():
             x_1 = x
             y_1 = y
             z_1 = z
+            dy_1 = dy
             attended_en_p_1 = attended_en_p
             attended_en_y_1 = attended_en_y
             real_en_p_1 = real_en_p
@@ -153,10 +155,10 @@ while not rospy.is_shutdown():
                     pass
             pass
 
-        elif (count == act_count +1):
+        else:
             #I WRITE THE RESULTS
             #LINE TO BE WRITTEN
-            line_to_override = ['Tentativo ' + str(act_count), round(x_1,3), round(y_1,3), round(math.sqrt(act_x**2+act_y**2),3), round(dist_per,3),round(dist_z_per,3), round(z_med / 3 ,3), a_p_1, ot_p_1, ox_p_1, a_y_1, ot_y_1, ox_y_1, V_m_1, Ph_1, k_1,round(real_en_y/10000+real_en_p/10000,3), round(real_en_p/10000,3), round(real_en_y/10000,3),round(attended_en_y/10000+attended_en_p/10000,3), round(attended_en_p/10000,3), round(attended_en_y/10000,3)]
+            line_to_override = ['Tentativo ' + str(act_count), round(x_1,3), round(y_1,3), round(math.sqrt(act_x**2+act_y**2),3), round(dy_1, 3), round(dist_per,3),round(dist_z_per,3), round(z_med / 3 ,3), a_p_1, ot_p_1, ox_p_1, a_y_1, ot_y_1, ox_y_1, V_m_1, Ph_1, k_1,round(real_en_y/1000+real_en_p/1000,3), round(real_en_p/1000,3), round(real_en_y/1000,3),round(attended_en_y/1000+attended_en_p/1000,3), round(attended_en_p/1000,3), round(attended_en_y/1000,3)]
 
             #APPENDING A NEW LINE
             with open(path, "a") as fp:
@@ -187,6 +189,3 @@ while not rospy.is_shutdown():
                 except:
                     pass
             pass
-
-        else :
-            print("SOMETHING WENT REAAAAAAALLY WRONG")

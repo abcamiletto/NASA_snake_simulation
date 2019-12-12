@@ -2,7 +2,7 @@
 
 import csv
 import rospy
-from geometry_msgs.msg import Point
+from my_odom_publisher.msg import odom
 from sensor_msgs.msg import JointState
 from control_sn.msg import param
 import math
@@ -42,10 +42,11 @@ z_med = 0.0
 
 #CALLBACKS FUNCTIONS
 def Callback1(data):
-    global x, y, z
+    global x, y, z, dy
     x = data.x
     y = data.y
     z = data.z -0.055
+    dy = data.diffy
 
 def Callback2(data):
     global a_p, ot_p, ox_p, a_y, ot_y, ox_y, V_m, Ph, k, count
@@ -66,7 +67,7 @@ def Callback3(data):
 
 #SUBSCRIBERS
 rospy.Subscriber('/snake/joint_states', JointState, Callback3)
-rospy.Subscriber('/my_odom', Point, Callback1)
+rospy.Subscriber('/my_odom', odom, Callback1)
 rospy.Subscriber('/param', param, Callback2)
 
 #WRITING THE FIRST LINE

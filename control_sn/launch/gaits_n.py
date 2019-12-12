@@ -28,6 +28,7 @@ for i in range(num):
     exec("motor{}y = rospy.Publisher('/snake/snake_body_{}_aux_joint_position_controller/command',Float64, queue_size = 121)".format(i,i))
 
 
+
 pub_param = rospy.Publisher('/param', param, queue_size=10)
 
 en_consuption = rospy.Publisher('/energy', energy, queue_size=10)
@@ -35,15 +36,17 @@ en_consuption = rospy.Publisher('/energy', energy, queue_size=10)
 rospy.Subscriber('/snake/joint_states', JointState, Callback3)
 
 #GRID SEARCH PARAMETERS
-a_p_span = [15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0, 55.0, 60.0]
-ot_p_span = [150.0]
-ox_p_span = [40.0]
-a_y_span = [0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 30.0]
-ot_y_span = [150.0]
-ox_y_span = [40.0, 80.0, 120.0]
-ph_span = [0.0, 2.5, 7.5, 10.0]
-v_med_span = [0.0, 2.5, 5.0, 7.5, 10.0, 15.0, 22.5, 30.0]
-TIMESPAN = 12
+a_p_span = [20.0, 30.0, 40.0, 50.0, 60.0]
+ot_p_span = [45.0]
+ox_p_span = [30.0, 36.0, 42.0]
+a_y_span = [0.0, 5.0, 10.0, 15.0, 20.0, 30.0]
+ot_y_span = [45.0]
+ox_y_span = [36.0, 72.0]
+ph_span = [0.0, 2.5, 5.0, 7.5, 10.0]
+v_med_span = [0.0, 5.0, 10.0]
+TIMESPAN = 24
+
+yawzero_count = 0
 
 tent = len(a_p_span)*len(ot_p_span)*len(ox_p_span)*len(a_y_span)*len(ot_y_span)*len(ox_y_span)*len(ph_span)*len(v_med_span)
 
@@ -77,13 +80,20 @@ rospy.sleep(0.3)
 
 # GRID SEARCH
 for b in ot_p_span:
-    for e in ot_y_span:
-        for c in ox_p_span:
-            for f in ox_y_span:
-                for a in a_p_span:
-                    for d in a_y_span:
-                        for h in ph_span:
-                            for g in v_med_span:
+    for c in ox_p_span:
+        for g in v_med_span:
+            for a in a_p_span:
+                for d in a_y_span:
+ #                   yawzero_count = 0
+#
+ #                   if d == 0.0:
+  #                      yawzero_count += 1
+   #                     if yawzero_count != 1:
+    #                    continue
+                    for h in ph_span:
+                        for f in ox_y_span:
+                            for e in ot_y_span:
+
 
                                 print("TRY n: " + str(counter) + "/" + str(tent) + " STARTED")
                                 print("PARAMETERS:     ( " + str(a)+"  "+str(b)+"  "+str(c)+" )     ( "+str(d)+"  "+str(e)+"  "+str(f)+" )    ( "+str(g)+"  "+str(h)) + " )"
@@ -182,27 +192,12 @@ for b in ot_p_span:
                                     ENERGY.realpot = realpot
                                     ENERGY.attendedpot = attendedpot
 
-                                    for indx in range(0,num):
-                                        if attendedpot[int(2*indx)] > 0 :
-                                            attended_en_y += attendedpot[int(2*indx)]
-                                        elif attendedpot[int(2*indx)] < 0 :
-                                            attended_en_y += -attendedpot[int(2*indx)]
+                                    for indx in range(num):
+                                        attended_en_y += abs(attendedpot[int(2*indx)])
+                                        attended_en_p += abs(attendedpot[int(2*indx+1)])
+                                        real_en_y += abs(realpot[int(2*indx)])
+                                        real_en_p += abs(realpot[int(2*indx+1)])
 
-                                        if attendedpot[int(2*indx+1)] > 0:
-                                            attended_en_p += attendedpot[int(2*indx+1)]
-                                        elif attendedpot[int(2*indx+1)] < 0 :
-                                            attended_en_p += -attendedpot[int(2*indx+1)]
-
-                                    for indx in range(0,num):
-                                        if realpot[int(2*indx)] > 0 :
-                                            real_en_y += realpot[int(2*indx)]
-                                        elif realpot[int(2*indx)] < 0 :
-                                            real_en_y += -realpot[int(2*indx)]
-
-                                        if realpot[int(2*indx+1)] > 0:
-                                            real_en_p += realpot[int(2*indx+1)]
-                                        elif realpot[int(2*indx+1)] < 0 :
-                                            real_en_p += -realpot[int(2*indx+1)]
 
                                     ENERGY.real_p_en = real_en_p
                                     ENERGY.real_y_en = real_en_y
