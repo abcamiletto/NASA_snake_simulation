@@ -7,8 +7,7 @@ from std_msgs.msg import Float64
 import math
 import rospkg
 import numpy
-from control_sn.msg import param
-from control_sn.msg import printresu
+from control_sn.msg import param, printresu
 from geometry_msgs.msg import Point
 from std_srvs.srv import Empty
 import time
@@ -23,8 +22,9 @@ def Callback1(data):
     z = data.z
 
 def Callback3(data):
-    global tor
+    global tor, veloc
     tor = data.effort
+    veloc = data.velocity
 
 rospy.init_node('mycontrol')
 num = rospy.get_param('~numb')
@@ -70,36 +70,37 @@ rospy.sleep(0.1)
 pub_param.publish(P)
 rospy.sleep(0.3)
 
-n_pti_rand = int(raw_input("Numero di punti iniziali randomici: "))
-n_iteraz = int(raw_input("Numero di iterazioni: "))
+n_pti_rand = int(raw_input("Number of random initial points: "))
+n_iteraz = int(raw_input("Number of iterations: "))
 global fre
-fre = float(raw_input("Inserire la frequenza temporale del pitch e dello yaw: "))
+fre = float(raw_input("Temporal frequence of pitch and yaw: "))
+tsec = float(raw_input("Simulation period: "))
 
-bounds_choose = raw_input("Vuoi scegliere gli intervalli dei parametri?:\n[y/n]")
+bounds_choose = raw_input("Do you want to choose the bounds of parameters?:\n[y/n]")
 if bounds_choose == 'y':
-    amp_p1 = float(raw_input("Ampiezza pitch1: "))
-    amp_p2 = float(raw_input("Ampiezza pitch2: "))
+    amp_p1 = float(raw_input("Lower bound amplitude pitch: "))
+    amp_p2 = float(raw_input("Upper bound amplitude pitch: "))
     # omt_p1 = float(raw_input("Frequenza temporale pitch1: "))
     # omt_p2 = float(raw_input("Frequenza temporale pitch2: "))
-    omx_p1 = float(raw_input("Frequenza spaziale pitch1: "))
-    omx_p2 = float(raw_input("Frequenza spaziale pitch2: "))
-    amp_y1 = float(raw_input("Ampiezza yaw1: "))
-    amp_y2 = float(raw_input("Ampiezza yaw2: "))
+    omx_p1 = float(raw_input("Lower bound spatial frequence pitch: "))
+    omx_p2 = float(raw_input("Upper bound spatial frequence pitch: "))
+    amp_y1 = float(raw_input("Lower bound amplitude yaw: "))
+    amp_y2 = float(raw_input("Upper bound amplitude yaw: "))
     # omt_y1 = float(raw_input("Frequenza temporale yaw1: "))
     # omt_y2 = float(raw_input("Frequenza temporale yaw2: "))
-    omx_y1 = float(raw_input("Frequenza spaziale yaw1: "))
-    omx_y2 = float(raw_input("Frequenza spaziale yaw2: "))
-    phas1 = float(raw_input("Fase1: "))
-    phas2 = float(raw_input("Fase2: "))
-    val1 = float(raw_input("Valore medio1: "))
-    val2 = float(raw_input("Valore medio2: "))
-    kos1 = float(raw_input("Costante1: "))
-    kos2 = float(raw_input("Costante2: "))
+    omx_y1 = float(raw_input("Lower bound spatial frequence yaw: "))
+    omx_y2 = float(raw_input("Upper bound spatial frequence yaw: "))
+    phas1 = float(raw_input("Lower bound phase: "))
+    phas2 = float(raw_input("Upper bound phase: "))
+    val1 = float(raw_input("Lower bound mean value: "))
+    val2 = float(raw_input("Upper bound mean value: "))
+    kos1 = float(raw_input("Lower bound constant: "))
+    kos2 = float(raw_input("Upper bound constant: "))
     bounds =  {'a': (amp_p1, amp_p2), 'c': (omx_p1, omx_p2), 'd': (amp_y1, amp_y2), 'f': (omx_y1, omx_y2), 'g': (val1, val2), 'h': (phas1, phas2), 'i': (kos1, kos2)}
 else:
-    bounds = {'a': (20,60), 'c': (30, 50), 'd': (0,20), 'f': (35, 85), 'g': (0, 20), 'h': (0, 15), 'i': (0,0)}
+    bounds = {'a': (30,60), 'c': (15, 85), 'd': (0,40), 'f': (0, 90), 'g': (0, 40), 'h': (0, 10), 'i': (0, 0)}
 
-print("\nPartire da un valore assegnato? [y/n]\n")
+print("\nDo you want to start from a particular set of parameters? [y/n]\n")
 assegnaz = raw_input()
 
 # FUNZIONE DI COSTO DA OTTIMIZZARE
@@ -108,8 +109,12 @@ def cost_func(a, c, d, f, g, h, i):
 
     global counter
 
-    en_p = 0
-    en_y = 0
+    rospy.sleep(0.2)
+
+    attended_en_p = 0
+    attended_en_y = 0
+    real_en_p = 0.001
+    real_en_y = 0.001
 
     P = param()
 
@@ -181,17 +186,13 @@ def cost_func(a, c, d, f, g, h, i):
     act_z = 0.0
     dist_rel= 0.0
     dist_per = 0.0
-    dist = 0
     dist_z_per = 0.0
     dist_z_rel = 0.0
     z_med = 0.0
     z_to_add = 0.0
-    en_p = 0.0
-    en_y = 0.0
-    en_tot = 0.0
 
     # da usare quando pubblicokos = float(raw_input("Costante: "))
-    while t < 7:
+    while t < tsec:
 
         #UPDATING THE VARIABLES
         x_1 = x
@@ -208,25 +209,20 @@ def cost_func(a, c, d, f, g, h, i):
         pace = [0]*(num * 2)
 
         for i in range(num*2):
+
             if (i % 2) == 0:
-                exec("pace[{}] = a_p * ot_y * math.cos(t * ot_y + ox_y * {})".format(i,i/2))
+                exec("pace[{}] = a_y * ot_y * math.cos(t * ot_y + ox_y * {})".format(i,i/2))
             else:
-                exec("pace[{}] = a_y * ot_p * math.cos(t * ot_p + ox_p * {} + ph)".format(i,(i-1)/2))
+                exec("pace[{}] = a_p * ot_p * math.cos(t * ot_p + ox_p * {} + ph)".format(i,(i-1)/2))
 
-        pot = numpy.multiply(pace, tor)
+        attendedpot = numpy.multiply(pace, tor)
+        realpot = numpy.multiply(veloc, tor)
 
-        for indx in range(0,num):
-            if pot[int(2*indx)] > 0 and pot[int(2*indx)] < 0.9:
-                en_y += pot[int(2*indx)]
-            elif pot[int(2*indx)] < 0 and pot[int(2*indx)] > -0.9:
-                en_y += -pot[int(2*indx)]
-
-            if pot[int(2*indx+1)] > 0 and pot[int(2*indx+1)] < 0.9:
-                en_p += pot[int(2*indx+1)]
-            elif pot[int(2*indx+1)] < 0 and pot[int(2*indx+1)] < -0.9:
-                en_p += -pot[int(2*indx+1)]
-
-        effic = (-15*y_1)/(en_y/200 + en_p/200)
+        for indx in range(num):
+            attended_en_y += abs(attendedpot[int(2*indx)])
+            attended_en_p += abs(attendedpot[int(2*indx+1)])
+            real_en_y += abs(realpot[int(2*indx)])
+            real_en_p += abs(realpot[int(2*indx+1)])
 
         # DEFINING THE MOVEMENTS
 
@@ -261,23 +257,27 @@ def cost_func(a, c, d, f, g, h, i):
 
         z_med += z_to_add
 
+        effic = (abs(y_1))/(attended_en_y + attended_en_p)*100000000
+
         #KEEPING LAST-1 VALUES IN MEMORY
         act_x = x_1
         act_y = y_1
         act_z = z_1
 
         pr = printresu()
-
         pr.x_1 = x_1
         pr.y_1 = y_1
         pr.dist = math.sqrt(x_1**2+y_1**2)
         pr.dist_per = dist_per
         pr.dist_z_per = dist_z_per
         pr.z_med = z_med
-        pr.en_tot = en_tot
-        pr.en_p = en_p
-        pr.en_y = en_y
         pr.effic = effic
+        pr.real_p_en = real_en_p
+        pr.real_y_en = real_en_y
+        pr.attended_p_en = attended_en_p
+        pr.attended_y_en = attended_en_y
+        pr.realpot = realpot
+        pr.attendedpot = attendedpot
 
         PRINT.publish(pr)
 
@@ -292,6 +292,7 @@ def cost_func(a, c, d, f, g, h, i):
         pass
 
     counter += 1
+
 
     return effic
 

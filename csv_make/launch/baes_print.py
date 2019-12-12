@@ -13,7 +13,7 @@ rospy.init_node('writer_csv')
 leng = rospy.get_param('~leng')
 
 #DEFINING A DIRECTORY and file name
-dir = os.path.dirname(os.path.expanduser("~/Desktop"))
+dir = os.path.expanduser("~")
 filenm = "baes_search_results"
 path = dir + "/Desktop/results/" + filenm + ".csv"
 
@@ -31,8 +31,6 @@ V_m = 0.0
 Ph = 0.0
 k = 0.0
 count = 0
-x_1 = 0.0
-y_1 = 0.0
 dist = 0.0
 power = [0] * (leng*2)
 info_to_print = [0] * 5
@@ -49,16 +47,17 @@ z_med = 0.0
 
 #CALLBACKS FUNCTIONS
 def Callback1(data):
-    global x_1, y_1, dist, dist_per, dist_z_per, z_med, en_tot, en_p, en_y, effic
-    x_1 = data.x_1
-    y_1 = data.y_1
+    global x, y, dist, dist_per, dist_z_per, z_med, effic, real_en_y, real_en_p, attended_en_p, attended_en_y
+    x = data.x_1
+    y = data.y_1
     dist = data.dist
     dist_per = data.dist_per
     dist_z_per = data.dist_z_per
     z_med = data.z_med
-    en_tot = data.en_tot
-    en_p = data.en_p
-    en_y = data.en_y
+    real_en_p = data.real_p_en
+    real_en_y = data.real_y_en
+    attended_en_p = data.attended_p_en
+    attended_en_y = data.attended_y_en
     effic = data.effic
 
 
@@ -83,11 +82,16 @@ rospy.Subscriber('/print', printresu, Callback1)
 #WRITING THE FIRST LINE
 with open(path, "wb") as writeFile:
     wr=csv.writer(writeFile, dialect='excel')
-    wr.writerow(['Attempt', 'x', 'y', 'Total Distance', 'Traveled space','Height Variation Stability', 'Mean Height', 'Amplitude Pitch', 'Time frequency Pitch', 'Spatial frequency Pitch', 'Amplitude Yaw', 'Time frequency Yaw', 'Spatial frequency Yaw', 'Mean value', 'Phase', 'Constant', 'Total Energy', 'Pitch Energy', 'Yaw Energy', 'Efficency'])
+    wr.writerow(['Attempt', 'x', 'y', 'Total Distance', 'Traveled space','Height Variation Stability', 'Mean Height', 'Amplitude Pitch', 'Time frequency Pitch', 'Spatial frequency Pitch', 'Amplitude Yaw', 'Time frequency Yaw', 'Spatial frequency Yaw', 'Mean value', 'Phase', 'Constant', 'Real Energy yaw', 'Real Energy pitch', 'Attended Energy yaw', 'Attended Energy pitch', 'Total Real Energy', 'Total Attended Energy', 'Efficency'])
     writeFile.close()
 
 #PARAMETERS I NEED
 act_count = 1
+attended_en_p = 0
+attended_en_y = 0
+real_en_p = 0
+real_en_y = 0
+effic = 0
 
 
 #WRITING THE CSV
@@ -107,6 +111,12 @@ while not rospy.is_shutdown():
     #SNAKE PARAMETERS ARE IN
     else:
         if count == act_count :
+            x_1 = x
+            y_1 = y
+            dist_1 = dist
+            dist_per_1 = dist_per
+            dist_z_per_1 = dist_z_per
+            z_med_1 = z_med
             a_p_1 = a_p
             ot_p_1 = ot_p
             ox_p_1 = ox_p
@@ -116,7 +126,12 @@ while not rospy.is_shutdown():
             V_m_1 = V_m
             Ph_1 = Ph
             k_1 = k
-            
+            real_en_p_1 = real_en_p/100000
+            real_en_y_1 = real_en_y/100000
+            attended_en_p_1 = attended_en_p/100000
+            attended_en_y_1 = attended_en_y/100000
+            effic_1 = effic
+
             pd = True
             while pd:
                 try:
@@ -130,7 +145,7 @@ while not rospy.is_shutdown():
             #I WRITE THE RESULTS
             #LINE TO BE WRITTEN
 
-            line_to_override = ['Tentativo ' + str(act_count), round(x_1,3), round(y_1,3), round(dist,3), round(dist_per,3),round(dist_z_per,3), round(z_med / 3 ,3), round(a_p_1,3), round(ot_p_1,3), round(ox_p_1), round(a_y_1), round(ot_y_1), round(ox_y_1), round(V_m_1), round(Ph_1), round(k_1) ,round(en_p/200+en_y/200,3), round(en_p/200,3), round(en_y/200,3), round(effic, 3)]
+            line_to_override = ['Tentativo ' + str(act_count), round(x_1, 3), round(y_1, 3), round(dist_1,3), round(dist_per_1,3),round(dist_z_per_1,3), round(z_med_1 ,3), round(a_p_1,3), round(ot_p_1,3), round(ox_p_1,3), round(a_y_1,3), round(ot_y_1,3), round(ox_y_1,3), round(V_m_1,3), round(Ph_1,3), round(k_1,3) ,round(real_en_y_1, 3), round(real_en_p_1, 3), round(attended_en_y_1,3), round(attended_en_p_1,3), round(real_en_p_1+real_en_y_1,3), round(attended_en_p_1+attended_en_y_1,3), round(effic_1,3)]
 
             #APPENDING A NEW LINE
             with open(path, "a") as fp:

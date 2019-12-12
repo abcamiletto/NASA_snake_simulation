@@ -54,6 +54,7 @@ find_package(catkin REQUIRED COMPONENTS
    FILES
    param.msg
    printresu.msg
+   energy.msg
  )
 
 ## Generate services in the 'srv' folder
