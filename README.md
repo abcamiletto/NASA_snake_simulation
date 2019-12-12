@@ -53,6 +53,7 @@ The two main research algorithm are focused on finding the best gaits with sinus
 Let's take a look at the inputs.
 
 ![Alt text](yaw1.png?raw=true "Title")
+
 ![Alt text](pitch.png?raw=true "Title")
 
 
