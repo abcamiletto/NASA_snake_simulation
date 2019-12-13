@@ -15,7 +15,7 @@ leng = rospy.get_param('~leng')
 #DEFINING A DIRECTORY and file name
 dir = os.path.expanduser("~")
 filenm = "baes_search_results"
-path = dir + "/Scrivania/results/" + filenm + ".csv"
+path = dir + "/Desktop/results/" + filenm + ".csv"
 
 #GLOBAL PARAMATERS
 x = 0.0

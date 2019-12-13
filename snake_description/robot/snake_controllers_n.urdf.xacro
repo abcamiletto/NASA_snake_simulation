@@ -30,13 +30,13 @@
             <collision>
                 <origin xyz="0 0 0.025" rpy="0 0 0"/>
                 <geometry>
-                    <cylinder radius="${Radius}" length="0.05"/>
+                    <cylinder radius="${Radius-0.005}" length="0.05"/>
                 </geometry>
             </collision>
             <visual>
                 <origin xyz="0 0 0.025" rpy="0 0 0"/>
                 <geometry>
-                    <cylinder radius="${Radius}" length="0.05"/>
+                    <cylinder radius="${Radius-0.005}" length="0.05"/>
                 </geometry>
             </visual>
     	</link>

@@ -99,7 +99,7 @@ if bounds_choose == 'y':
     kos2 = float(raw_input("Upper bound constant: "))
     bounds =  {'a': (amp_p1, amp_p2), 'c': (omx_p1, omx_p2), 'd': (amp_y1, amp_y2), 'f': (omx_y1, omx_y2), 'g': (val1, val2), 'h': (phas1, phas2), 'i': (kos1, kos2)}
 else:
-    bounds = {'a': (30,60), 'c': (15, 85), 'd': (0,40), 'f': (0, 90), 'g': (0, 40), 'h': (0, 10), 'i': (0, 0)}
+    bounds = {'a': (10,60), 'c': (30, 42), 'd': (0,15), 'f': (30, 80), 'g': (0, 10), 'h': (0, 8), 'i': (0, 0)}
 
 print("\nDo you want to start from a particular set of parameters? [y/n]\n")
 assegnaz = raw_input()
@@ -205,7 +205,7 @@ def cost_func(a, c, d, f, g, h, i):
         toc = rospy.Time.now() - tic
         t = (toc.secs * (10 ** 9) + toc.nsecs) / (10 ** 9 * 1.0000)
 
-        if (sec % 100 == 0):
+        if (sec % 500 == 0):
             print(str(sec / 100))
 
         #PUBLISHING THE ADJUSTED ENERGY
@@ -244,7 +244,7 @@ def cost_func(a, c, d, f, g, h, i):
         #CALCULATING OUTPUT OF PROGRESSIVE VALUES
         dist_rel = math.sqrt((x_1-act_x)**2+(y_1-act_y)**2)
         dist_z_rel = math.fabs(z_1-act_z)
-        z_to_add = z_1 / 1
+        z_to_add = z_1
 
             #DESYNC AVOIDANCE
         if (dist_rel < 0.1) :
@@ -260,7 +260,7 @@ def cost_func(a, c, d, f, g, h, i):
 
         z_med += z_to_add
 
-        effic = (abs(y_1))/(dy_1*(attended_en_y + attended_en_p))*100000000
+        effic = (abs(y_1)**2.1)/((dy_1+0.7)**0.4*(real_en_y + real_en_p)*(z_med+100)**0.8*(abs(x_1)+0.5)**0.5)*1000000000
 
         #KEEPING LAST-1 VALUES IN MEMORY
         act_x = x_1
@@ -297,6 +297,7 @@ def cost_func(a, c, d, f, g, h, i):
 
     counter += 1
 
+    print("Y = " + str(round(abs(y_1),4)) + "     dY = " + str(round((dy_1+0.7)**0.4,4)) + "   tot_en = " + str(round((real_en_y + real_en_p)/1000000,4)) + "   z_med = " + str(round((z_med+100)**0.8/10,4)) + "   X = " + str(round((abs(x_1)+0.5)**0.5,4)))
 
     return effic
 
