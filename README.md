@@ -6,6 +6,10 @@ The ROS Melodic and Gazebo 9 setup working on Ubuntu 18.04 LTS, with optimum res
 ### ROS
 To install ROS just follow the [main guide](http://wiki.ros.org/melodic/Installation/Ubuntu)
 
+After that, you need to install ROS control package, just:
+
+`sudo apt-get install ros-melodic-ros-control ros-melodic-ros-controllers`
+
 ### Gazebo
 It should have been installed with the previous steps, if that's not the case follow the [installation tutorial](http://gazebosim.org/tutorials?tut=install_ubuntu&cat=install)
 
