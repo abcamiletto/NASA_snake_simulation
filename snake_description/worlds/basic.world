@@ -1,3 +1,4 @@
+<?xml version="1.0" ?>
 <sdf version="1.5">
   <world name="default">
     
@@ -22,6 +23,22 @@
       <cast_shadows>0</cast_shadows>
       <direction>0 0 -1</direction>
     </light>
-    
+
+    <population name="stone">
+      <model name="stone">
+        <include>
+          <static>false</static>
+          <uri>model://stone</uri>
+        </include>
+      </model>
+      <pose>0 0 0 0 0 0</pose>
+      <box>
+        <size>8 8 0.01</size>
+      </box>
+      <model_count>15</model_count>
+      <distribution>
+        <type>random</type>
+      </distribution>
+    </population>
   </world>
 </sdf>

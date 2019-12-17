@@ -10,6 +10,7 @@ echo $max_effort_pitch
 echo $max_effort_yaw
 
 echo Done.
+export GAZEBO_MODEL_PATH=/home/daniele/snake_andrea/src/snake/snake_description/worlds:$GAZEBO_MODEL_PATH
 cd ..
 cd script
 python config_files_yaml_generator.py $number_of_joints
@@ -18,4 +19,4 @@ number_of_elements=$(cat numelements_temp.yaml)
 echo $number_of_elements
 controllerargs=$(cat controllerargs_temp.yaml)
 echo $controllerargs
-roslaunch snake_description onlyGUI.launch number_of_elements:="$number_of_elements" controller_args:="$controllerargs" diameter_m:="$radius" lenght_m:="$lenght" mass_m:="$mass" friction_m:="$friction" max_ef:="$max_effort_pitch" max_ya:="$max_effort_yaw"
+roslaunch snake_description onlyGUI_stone.launch number_of_elements:="$number_of_elements" controller_args:="$controllerargs" diameter_m:="$radius" lenght_m:="$lenght" mass_m:="$mass" friction_m:="$friction" max_ef:="$max_effort_pitch" max_ya:="$max_effort_yaw"
