@@ -48,7 +48,7 @@ print("HO INIZIALIZZATO I PUBLISHER")
 
 
 def start_pub(event):
-
+    sec = 0
     # 6--------------------------------------------------------------------- pubblico nel topic
     tic = rospy.Time.now()
     toc = rospy.Time.now() - tic
@@ -59,7 +59,8 @@ def start_pub(event):
     while toc.secs < timespan :
         toc = rospy.Time.now() - tic
         t = (toc.secs * (10 ** 9) + toc.nsecs) / (10 ** 9 * 1.0000)
-        print(t)
+        if (sec % 100 == 0):
+            print(str(sec / 100))
         for i in range(num):
             exec("msg{}p = a_p * math.sin(t * ot_p + ox_p * {})".format(i,i))
             exec("msg{}y = a_y * math.sin(t * ot_y + ox_y * {} + ph) + v_med + {}*k".format(i,i,i))
@@ -69,6 +70,8 @@ def start_pub(event):
         for i in range(num):
             exec("motor{}p.publish(msg{}p)".format(i,i))
             exec("motor{}y.publish(msg{}y)".format(i,i))
+
+        sec += 1
 
         r.sleep()
 
