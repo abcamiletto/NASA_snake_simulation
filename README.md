@@ -86,9 +86,10 @@ Other parameters you may want to change are:
 
 - **PIDs** : the PIDs of the Yaw and Pitch degree of freedom. You can find them in *src/START/script/config_files_yaml_generator.py*. The default values are P = 3000 for the yaw and P = 11000 for the pitch, both with I and D equal to zero.
 - **Grid Search Span** : the mash you want the grid search to look into. You can find it in *src/control_sn/launch/gaits_n.py*
-- **Baesian Optimization Default Values** : 
-    - the free parameter *k* (balance between exploration and exploitation); in our case it was fixed at the default value ie *k = 2.576*;
-    - the utility function: the choice is between the *Probability of Improvement* ("poi"), the *Expected Improvement* ("ei") and the *Upper Confidence Bound* ("ucb"). By default the utility function is UCB;
+- **Baesian Optimization** : 
+    - DEFAULT VALUES:
+        - the free parameter *k* (balance between exploration and exploitation); in our case it was fixed at the default value ie *k = 2.576*;
+        - the utility function: the choice is between the *Probability of Improvement* ("poi"), the *Expected Improvement* ("ei") and the *Upper Confidence Bound* ("ucb"). By default the utility function is UCB;
     
     You can add them in */src/control_sn/launch/gaits_optimization.py* as arguments to the *maximize* function (at the bottom of the script). An example might be: 
     ```
@@ -99,3 +100,7 @@ Other parameters you may want to change are:
         kappa=2.576,
     )
     ```
+    - "Efficiency" function: in order to modify the efficiency (the output of each simulation which is taken into account by the optimization algorithm) you should open the *gaits_optimization.py* in the repository *src/control_sn/launch* and modify the line 262. Currently our efficiency is:
+    
+    ![Alt text](eff.png?raw=true "Title")
+    
