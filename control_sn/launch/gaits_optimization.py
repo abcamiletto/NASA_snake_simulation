@@ -101,8 +101,6 @@ if bounds_choose == 'y':
 else:
     bounds = {'a': (10,60), 'c': (30, 42), 'd': (0,15), 'f': (30, 80), 'g': (0, 10), 'h': (0, 8), 'i': (0, 0)}
 
-print("\nDo you want to start from a particular set of parameters? [y/n]\n")
-assegnaz = raw_input()
 
 # FUNZIONE DI COSTO DA OTTIMIZZARE
 
@@ -259,7 +257,8 @@ def cost_func(a, c, d, f, g, h, i):
             pass
 
         z_med += z_to_add
-
+	
+	# EFFICIENCY FUNCTION
         effic = (abs(y_1)**2.1)/((dy_1+0.7)**0.4*(real_en_y + real_en_p)*(z_med+100)**0.8*(abs(x_1)+0.5)**0.5)*1000000000
 
         #KEEPING LAST-1 VALUES IN MEMORY
@@ -303,9 +302,8 @@ def cost_func(a, c, d, f, g, h, i):
 
 
 
-# PROCESSO DI OTTIMIZZAZIONE
+# OPTIMIZATION PROCESS
 
-# DEFINIZIONE DEI CONSTRAINTS
 
 optimizer = BayesianOptimization(
     f=cost_func,
@@ -313,10 +311,6 @@ optimizer = BayesianOptimization(
     random_state=1,
 )
 
-# GUIDING THE OPTIMIZATION: PARTE DA PUNTI ASSEGNATI
-if assegnaz == 'y':
-    optimizer.probe(
-        params={"a": 32,"b": 32, "c": 32, "d": 22, "e": 32, "f": 32, "g": 0.1, "h": 11, "i": 0.24})
 
 optimizer.maximize(
     init_points=n_pti_rand,
