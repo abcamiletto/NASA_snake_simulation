@@ -104,14 +104,14 @@ def getInput():
 def LinearProgression(event):
     global a_p, ot_p, ox_p, a_y, ot_y, ox_y, v_med, ph, k
 
-    a_p = 60.0
-    ot_p = 150.0
-    ox_p = 54.0
-    a_y = 2.0
-    ot_y = 150.0
-    ox_y = 27.0
-    v_med = 15.0
-    ph = 0.0
+    a_p = 50.0
+    ot_p = 36.0
+    ox_p = 36.0
+    a_y = 2.4
+    ot_y = 36.0
+    ox_y = 70.0
+    v_med = 2.5
+    ph = 6.2
     k = 0.0
 
     entry1_var.set(a_p)
@@ -128,15 +128,15 @@ def LinearProgression(event):
 def LateralOndulation(event):
     global a_p, ot_p, ox_p, a_y, ot_y, ox_y, v_med, ph, k
 
-    a_p = 20.0
-    ot_p = 150.0
-    ox_p = 54.0
-    a_y = 30.0
-    ot_y = 150.0
-    ox_y = 54.0
-    v_med = 15.0
-    ph = 15.0
-    k = 0
+    a_p = 60.0
+    ot_p = 45.0
+    ox_p = 39.0
+    a_y = 5.7
+    ot_y = 45.0
+    ox_y = 67.4
+    v_med = 3.1
+    ph = 4.1
+    k = 0.0
 
     entry1_var.set(a_p)
     entry2_var.set(ot_p)
@@ -151,15 +151,15 @@ def LateralOndulation(event):
 def Rolling(event):
     global a_p, ot_p, ox_p, a_y, ot_y, ox_y, v_med, ph, k
 
-    a_p = 70.0
-    ot_p = 150.0
-    ox_p = 54.0
-    a_y = 15.0
-    ot_y = 150.0
-    ox_y = 162.0
-    v_med = 20.0
-    ph = 0.0
-    k = 0
+    a_p = 50.0
+    ot_p = 36.0
+    ox_p = 36.0
+    a_y = 4.6
+    ot_y = 36.0
+    ox_y = 36.0
+    v_med = 2.8
+    ph = 0.3
+    k = 0.0
 
     entry1_var.set(a_p)
     entry2_var.set(ot_p)
@@ -176,14 +176,14 @@ def Rolling(event):
 def SideWinding(event):
     global a_p, ot_p, ox_p, a_y, ot_y, ox_y, v_med, ph, k
 
-    a_p = 65.0
-    ot_p = 150.0
-    ox_p = 54.0
-    a_y = 0.0
-    ot_y = 150.0
-    ox_y = 27.0
-    v_med = 15.0
-    ph = 0.0
+    a_p = 50.0
+    ot_p = 36.0
+    ox_p = 36.0
+    a_y = 0.6
+    ot_y = 36.0
+    ox_y = 36.0
+    v_med = 5.0
+    ph = 9.3
     k = 0.0
 
     entry1_var.set(a_p)
@@ -288,9 +288,9 @@ entry9 = Entry(sevline, text=entry9_var)
 lab10 = Label(ninline, text = "TimeSpan")
 entry10 = Entry(ninline, text = entry10_var)
 linprog = Button(mod, text = "Best 1")
-latond = Button(mod, text ="Most Efficient 1")
+latond = Button(mod, text ="Best 3")
 roll = Button(mod, text = "Best 2")
-sidwin = Button(mod, text = "Most Efficient 2")
+sidwin = Button(mod, text = "Best 4")
 startpub = Button(bottomFrame, text = "Start Publishing")
 stoppub = Button(bottomFrame, text = "Straight Position")
 shut = Button(bottomFrame, text = "Shutdown")
