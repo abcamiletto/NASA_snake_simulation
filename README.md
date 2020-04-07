@@ -1,6 +1,9 @@
 # EELS Simulation and Control
 The ROS Melodic and Gazebo 9 setup working on Ubuntu 18.04 LTS, with optimum research algorithms and GUI interface for manual tries.
 
+![Gif1](https://github.com/abcamiletto/eels_sim/blob/master/image_2019-12-19_17-21-17.png?raw=true)
+
+![Gif1](https://github.com/abcamiletto/mecrob_project/blob/master/images/ezgif.com-video-to-gif.gif?raw=true)
 ## Installation
 
 ### ROS
