@@ -1,7 +1,7 @@
 # EELS Simulation and Control
 The ROS Melodic and Gazebo 9 setup working on Ubuntu 18.04 LTS, with optimum research algorithms and GUI interface for manual tries.
 
-![Gif1](https://github.com/abcamiletto/eels_sim/blob/master/image_2019-12-19_17-21-17.png?raw=true)
+
 
 ![Gif2](https://github.com/abcamiletto/eels_sim/blob/master/ezgif-7-d21902ae1d3a.gif?raw=true)
 ## Installation
@@ -54,6 +54,8 @@ catkin build
 
 ## Code 
 The simulation is based on an existing snake Gazebo implementation, you can find it [here](http://answers.gazebosim.org/question/16715/how-can-i-represent-a-anake-robot-with-many-identical-segmens-in-sdf/). It's well explained and you can understand the basics of the setup.
+
+![Gif1](https://github.com/abcamiletto/eels_sim/blob/master/image_2019-12-19_17-21-17.png?raw=true)
 
 ### Search algorithms
 The two main research algorithm are focused on finding the best gaits with sinusoidal motion of the different motors. In particular, all motors follow two different input whether they control the pitch or yaw degree of freedom.
