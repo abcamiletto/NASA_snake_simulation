@@ -55,13 +55,13 @@ catkin build
 ## Code 
 The simulation is based on an existing snake Gazebo implementation, you can find it [here](http://answers.gazebosim.org/question/16715/how-can-i-represent-a-anake-robot-with-many-identical-segmens-in-sdf/). It's well explained and you can understand the basics of the setup.
 
-![Gif1](https://github.com/abcamiletto/eels_sim/blob/master/image_2019-12-19_17-21-17.png?raw=true)
+![Gif1](https://github.com/abcamiletto/eels_sim/blob/master/images_and_videos/image_2019-12-19_17-21-17.png?raw=true)
 
 ### Search algorithms
 The two main research algorithm are focused on finding the best gaits with sinusoidal motion of the different motors. In particular, all motors follow two different input whether they control the pitch or yaw degree of freedom.
 Let's take a look at the inputs.
 
-![Alt text](yaw1.png?raw=true "Title")
+![Alt text](images_and_videos/yaw1.png?raw=true "Title")
 
 ![Alt text](pitch.png?raw=true "Title")
 
