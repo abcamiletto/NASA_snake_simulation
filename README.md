@@ -3,7 +3,7 @@ The ROS Melodic and Gazebo 9 setup working on Ubuntu 18.04 LTS, with optimum res
 
 
 
-![Gif2](https://github.com/abcamiletto/eels_sim/blob/master/ezgif-7-d21902ae1d3a.gif?raw=true)
+![Gif2](https://github.com/abcamiletto/eels_sim/blob/master/images_and_videos/ezgif-7-d21902ae1d3a.gif?raw=true)
 ## Installation
 
 ### ROS
@@ -63,7 +63,7 @@ Let's take a look at the inputs.
 
 ![Alt text](images_and_videos/yaw1.png?raw=true "Title")
 
-![Alt text](pitch.png?raw=true "Title")
+![Alt text](images_and_videos/pitch.png?raw=true "Title")
 
 Where n is the number of the joint they're in.
 
@@ -107,5 +107,5 @@ Other parameters you may want to change are:
     ```
     - "Efficiency" function: in order to modify the efficiency (the output of each simulation which is taken into account by the optimization algorithm) you should open the *gaits_optimization.py* in the repository *src/control_sn/launch* and modify the line 262. Currently our efficiency is:
     
-    ![Alt text](eff.png?raw=true "Title")
+    ![Alt text](images_and_videos/eff.png?raw=true "Title")
     
