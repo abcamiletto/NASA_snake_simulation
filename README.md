@@ -3,7 +3,7 @@ The ROS Melodic and Gazebo 9 setup working on Ubuntu 18.04 LTS, with optimum res
 
 ![Gif1](https://github.com/abcamiletto/eels_sim/blob/master/image_2019-12-19_17-21-17.png?raw=true)
 
-![Gif1](https://github.com/abcamiletto/mecrob_project/blob/master/images/ezgif.com-video-to-gif.gif?raw=true)
+![Gif2](https://github.com/abcamiletto/eels_sim/blob/master/ezgif-7-d21902ae1d3a.gif?raw=true)
 ## Installation
 
 ### ROS
