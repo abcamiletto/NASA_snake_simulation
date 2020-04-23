@@ -1,4 +1,4 @@
-# EELS Simulation and Control
+# Snake Simulation and Control
 The ROS Melodic and Gazebo 9 setup working on Ubuntu 18.04 LTS, with optimum research algorithms and GUI interface for manual tries.
 
 
