@@ -1,0 +1,6 @@
+LISTA DI COSE DA FARE
+
+1- creare un subscriber che ascolti /my_odom e /param, salvi i parametri e fino a quando non arriva un nuovo dato su /param aggiorna i valori che arrivano da /my_odom salvandoli in un csv. Quando arriva un nuovo /param deve creare un nuovo object nel csv aumentando di 1 il numero del tentativo e ricominciare -- FOTTER
+2- creare una GUI tipo MatLab in python
+3- dal paper di Rohan fare delle prove con i parametri che suggerisce per cercare a mano una configurazione ottimale attorno la quale far partire il grid search
+4- scrivere uno script in python per il grid search
